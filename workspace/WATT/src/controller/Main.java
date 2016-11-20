@@ -228,6 +228,9 @@ public class Main {
 		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
 		// Stop recording
 		if (Watt.recording) { Record(); }
+		// Disable recording
+		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
+		recordingLabel.setDisable(true);
 		// Disable the Play button
 		playLabel.setDisable(true);
 		// Start Playing
@@ -269,6 +272,10 @@ public class Main {
 		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
 		// Enable the Play button
 		playLabel.setDisable(false);
+		// Get the Recording label
+		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
+		// Enable the Record button
+		recordingLabel.setDisable(false);
 		// Get the Stop button
 		Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
 		// Disable the Stop button
