@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.TextField?>
+<?import com.sun.javafx.scene.control.skin.InputField?>
+
+<VBox styleClass="app-wrapper" stylesheets="/assets/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Main">
+	<children>
+		<HBox alignment="CENTER_LEFT" styleClass="app-toolbar-wrapper">
+			<children>
+				<Label id="new" onMouseClicked="#NewTestCase" styleClass="app-toolbar-button" text="🗋">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+	               </HBox.margin>
+	               <tooltip>
+	               		<Tooltip text="New" />
+	               </tooltip>
+               </Label>
+				<Label id="save" onMouseClicked="#SaveTestCase" styleClass="app-toolbar-button" text="🖫">
+				   <HBox.margin>
+	                  <Insets bottom="0" left="6" right="6" top="0" />
+	               </HBox.margin>
+	               <tooltip>
+	               		<Tooltip text="Save" />
+	               </tooltip>
+	            </Label>
+				<Label id="open" onMouseClicked="#OpenTestCase" styleClass="app-toolbar-button" text="🗀">
+				   <HBox.margin>
+	                  <Insets bottom="0" left="6" right="6" top="0" />
+	               </HBox.margin>
+	               <tooltip>
+	               		<Tooltip text="Open" />
+	               </tooltip>
+               </Label>
+				<Pane HBox.hgrow="ALWAYS" />
+				<Label id="open-browser" onMouseClicked="#OpenBrowserWindow" styleClass="app-toolbar-button" text="🌐">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Open Browser Window" />
+					</tooltip>
+				</Label>
+			</children>
+		</HBox>
+		<HBox alignment="CENTER_LEFT" styleClass="test-step-header-wrapper">
+			<children>
+				<Text styleClass="test-step-header" text="Test Steps" />
+				<Pane HBox.hgrow="ALWAYS" />
+				<Label id="play" onMouseClicked="#Play" styleClass="test-step-header-button" text="⏵">
+					<HBox.margin>
+	                  <Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Play" />
+					</tooltip>
+				</Label>
+				<Label id="stop" disable="true" onMouseClicked="#Stop" styleClass="test-step-header-button" text="⏹">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Stop" />
+					</tooltip>
+				</Label>
+				<Label id="record" onMouseClicked="#Record" styleClass="test-step-header-button" text="⏺">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Record" />
+					</tooltip>
+				</Label>
+				<Label id="clear-results" disable="true" styleClass="test-step-header-button" text="❌">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Clear Results" />
+					</tooltip>
+				</Label>
+			</children>
+		</HBox>
+   		<HBox alignment="CENTER_LEFT" styleClass="test-step-settings-wrapper">
+   			<children>
+   				<CheckBox id="deselect-select-all" onMouseClicked="#DeselectSelectAll" selected="true">
+   					<tooltip>
+   						<Tooltip text="Deselect All Steps" />
+   					</tooltip>
+   				</CheckBox>
+   				<TextField id="base-url" promptText="Base URL" styleClass="form-control" HBox.hgrow="ALWAYS" />
+   				<Button id="expand-collapse-all" onMouseClicked="#ExpandCollapseAll" text="➕">
+   					<styleClass>
+	                  <String fx:value="btn" />
+	                  <String fx:value="btn-default" />
+	               </styleClass>
+   					<tooltip>
+   						<Tooltip text="Expand All Steps" />
+   					</tooltip>
+   				</Button>
+   				<Button id="remove-all" onMouseClicked="#RemoveAll" text="❌">
+					<HBox.margin>
+						<Insets right="14.0" />
+					</HBox.margin>
+					<styleClass>
+						<String fx:value="btn" />
+						<String fx:value="btn-danger" />
+					</styleClass>
+   					<tooltip>
+   						<Tooltip text="Remove All Steps" />
+   					</tooltip>
+   				</Button>
+   			</children>
+   		</HBox>
+   		<ScrollPane id="test-step-scrollpane" fitToHeight="true" fitToWidth="true" styleClass="edge-to-edge" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
+   		<VBox styleClass="test-step-builder-wrapper">
+	   		<VBox.margin>
+	            <Insets bottom="6" left="0" right="0" top="0" />
+	         </VBox.margin>
+   			<children>
+				<TextField id="test-step-builder-description" promptText="Description" styleClass="form-control" HBox.hgrow="ALWAYS">
+	               <VBox.margin>
+	                  <Insets left="6.0" right="6.0" top="6.0" />
+					</VBox.margin>
+				</TextField>
+				<ComboBox id="test-step-builder-command" promptText="Command">
+					<VBox.margin>
+						<Insets left="6.0" right="6.0" />
+					</VBox.margin>
+					<styleClass>
+						<String fx:value="combo-box" />
+						<String fx:value="form-control" />
+					</styleClass>
+				</ComboBox>
+   				<TextField id="test-step-builder-target" promptText="Target" styleClass="form-control" HBox.hgrow="ALWAYS">
+					<VBox.margin>
+						<Insets left="6.0" right="6.0" />
+					</VBox.margin>
+				</TextField>
+   				<TextField id="test-step-builder-value" promptText="Value" styleClass="form-control" HBox.hgrow="ALWAYS">
+					<VBox.margin>
+						<Insets left="6.0" right="6.0" />
+					</VBox.margin>
+				</TextField>
+   				<HBox>
+   					<children>
+   						<Button id="test-step-builder-add-step" onMouseClicked="#AddStep" text="Add Step">
+   							<styleClass>
+								<String fx:value="btn" />
+								<String fx:value="btn-success" />
+							</styleClass>
+							<HBox.margin>
+								<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+							</HBox.margin>
+						</Button>
+   						<Pane HBox.hgrow="ALWAYS" />
+   						<Button id="test-step-builder-clear-form" onMouseClicked="#ClearForm" text="Clear Form">
+   							<styleClass>
+								<String fx:value="btn" />
+								<String fx:value="btn-danger" />
+							</styleClass>
+							<HBox.margin>
+								<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+							</HBox.margin>
+						</Button>
+   					</children>
+   				</HBox>
+   			</children>
+   		</VBox>
+   </children>
+</VBox>

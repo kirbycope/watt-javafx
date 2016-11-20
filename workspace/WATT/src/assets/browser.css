@@ -1,0 +1,40 @@
+.browser-wrapper {
+    -fx-min-height: 480px;
+    -fx-min-width: 320px;
+}
+
+.browser-toolbar-wrapper {
+	-fx-background-color: #6d6d6d;
+	-fx-padding: .5em;
+}
+
+.browser-toolbar-button {
+	-fx-fill: #dadada;
+	-fx-text-fill: #dadada;
+}
+.browser-toolbar-button:hover {
+	-fx-fill: #fff;
+	-fx-text-fill: #fff;
+}
+
+.menu-container {
+	-fx-background-color: #6d6d6d;
+	-fx-max-height: 160px;
+	-fx-max-width: 120px;
+	-fx-padding: .5em;
+}
+
+.menu-container-header {
+	-fx-fill: #fff;
+	-fx-font-weight: bold;
+	-fx-text-fill: #fff;
+}
+
+.menu-container-item {
+	-fx-fill: #dadada;
+	-fx-text-fill: #dadada;
+}
+.menu-container-item:hover {
+	-fx-fill: #fff;
+	-fx-text-fill: #fff;
+}

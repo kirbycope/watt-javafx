@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.TextField?>
+<?import com.sun.javafx.scene.control.skin.InputField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox styleClass="browser-wrapper" stylesheets="/assets/browser.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Browser">
+	<children>
+		<HBox alignment="CENTER_LEFT" styleClass="browser-toolbar-wrapper">
+			<children>
+				<Label onMouseClicked="#Back" styleClass="browser-toolbar-button" text="←">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+               		</HBox.margin>
+	               	<tooltip>
+	               		<Tooltip text="Back" />
+					</tooltip>
+				</Label>
+				<Label onMouseClicked="#Forward" styleClass="browser-toolbar-button" text="→">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+               		</HBox.margin>
+	               	<tooltip>
+	               		<Tooltip text="Forward" />
+					</tooltip>
+				</Label>
+				<Label onMouseClicked="#Reload" styleClass="browser-toolbar-button" text="↻">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+               		</HBox.margin>
+	               	<tooltip>
+	               		<Tooltip text="Reload" />
+					</tooltip>
+				</Label>
+				<TextField id="addressBar" onAction="#Open" HBox.hgrow="ALWAYS">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+               		</HBox.margin>
+				</TextField>
+				<Label id="menu" onMouseClicked="#Menu" styleClass="browser-toolbar-button" text="☰">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+               		</HBox.margin>
+	               	<tooltip>
+	               		<Tooltip text="Menu" />
+					</tooltip>
+				</Label>
+			</children>
+		</HBox>
+		<StackPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+		   <children>
+		   			<WebView id="webview" />
+		   			<VBox id="menu-container"  managed="false" visible="false" styleClass="menu-container" StackPane.alignment="TOP_RIGHT">
+		   				<children>
+		   					<Label styleClass="menu-container-header" text="Commands" />
+		   					<Label styleClass="menu-container-item" text="Verify Location" />
+		   					<Label styleClass="menu-container-item" text="Verify Title" />
+		   					<Label styleClass="menu-container-header" text="Date" />
+		   					<Label styleClass="menu-container-item" text="Clear All Caches" />
+		   					<Label styleClass="menu-container-item" text="Clear Cookies" />
+		   					<Label styleClass="menu-container-header" text="Resize" />
+		   					<Label styleClass="menu-container-item" text="Mobile" />
+		   					<Label styleClass="menu-container-item" text="Mobile-Wide" />
+		   					<Label styleClass="menu-container-item" text="Tablet" />
+		   					<Label styleClass="menu-container-item" text="Desktop" />
+		   					<Label styleClass="menu-container-item" text="Desktop-Wide" />
+		   				</children>
+		   			</VBox>
+		   </children>
+		</StackPane>
+	</children>
+</VBox>

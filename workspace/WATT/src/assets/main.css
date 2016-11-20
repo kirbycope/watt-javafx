@@ -1,0 +1,167 @@
+.app-wrapper {
+    -fx-background-color: #f3f3f3;
+    -fx-padding: 0 .5em 0 .5em;
+    -fx-min-height: 480px;
+    -fx-min-width: 320px;
+}
+
+.app-toolbar-wrapper {
+	-fx-background-color: #6d6d6d;
+	-fx-padding: .5em;
+}
+
+.app-toolbar-button {
+	-fx-fill: #dadada;
+	-fx-text-fill: #dadada;
+}
+.app-toolbar-button:hover {
+	-fx-fill: #fff;
+	-fx-text-fill: #fff;
+}
+
+.test-step-header-wrapper {
+	-fx-padding: .5em .5em .5em .5em;
+}
+
+.test-step-header {
+	-fx-font-size: 1.125em;
+	-fx-font-weight: bold;
+}
+
+.test-step-header-button {
+	-fx-fill: #b4b4b4;
+	-fx-font-size: 1em;
+	-fx-text-fill: #b4b4b4;
+}
+.test-step-header-button:hover {
+	-fx-fill: #6d6d6d;
+	-fx-text-fill: #6d6d6d;
+}
+
+.test-step-header-button-recording {
+	-fx-fill: #d9534f;
+	-fx-font-size: 1em;
+	-fx-text-fill: #d9534f;
+}
+.test-step-header-button-recording:hover {
+	-fx-fill: #c9302c;
+	-fx-text-fill: #c9302c;
+}
+
+.test-step-settings-wrapper {
+	-fx-max-height: .5em;
+}
+
+.test-step-container-collapsed {
+	-fx-background-color: #f3f3f3;
+}
+
+.test-step-container-expanded {
+	-fx-background-color: #dddddd;
+	-fx-padding: 0 0 5px 0;
+    -fx-background-insets: 0 0 5px 0;
+}
+
+.duplicate-test-step {
+	-fx-fill: #fff;
+	-fx-text-fill: #fff;
+}
+.duplicate-test-step:hover {
+	-fx-fill: #4cae4c;
+	-fx-text-fill: #4cae4c;
+}
+
+.test-step-builder-wrapper {
+	-fx-background-color: #dddddd;
+}
+
+.combo-box {
+	-fx-background-color: #fff;
+}
+
+/* http://getbootstrap.com/css/#buttons */
+.btn {
+  -fx-border-color: transparent;
+  -fx-border-radius: .25em;
+  -fx-border-style: solid;
+  -fx-border-width: 1px;
+  -fx-cursor: pointer;
+  -fx-font-size: 1em;
+  -fx-font-weight: normal;
+}
+
+/* Default Button (White) */
+.btn-default {
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-text-fill: #333;
+}
+.btn-default:focus {
+  -fx-background-color: #e6e6e6;
+  -fx-border-color: #8c8c8c;
+  -fx-text-fill: #333;
+}
+.btn-default:hover {
+  -fx-background-color: #e6e6e6;
+  -fx-border-color: #adadad;
+  -fx-text-fill: #333;
+}
+
+/* Primary Button (Blue) */
+.btn-primary {
+    -fx-background-color: #337ab7;
+    -fx-border-color: #2e6da4;
+    -fx-text-fill: #fff;
+}
+.btn-primary:focus {
+  -fx-background-color: #286090;
+  -fx-border-color: #122b40;
+  -fx-text-fill: #fff;
+}
+.btn-primary:hover {
+  -fx-background-color: #286090;
+  -fx-border-color: #204d74;
+  -fx-text-fill: #fff;
+}
+
+/* Success Button (Green) */
+.btn-success {
+    -fx-background-color: #4cae4c;
+    -fx-border-color: #4cae4c;
+    -fx-text-fill: #fff;
+}
+.btn-success:focus {
+  -fx-background-color: #449d44;
+  -fx-border-color: #255625;
+  -fx-text-fill: #fff;
+}
+.btn-success:hover {
+  -fx-background-color: #449d44;
+  -fx-border-color: #398439;
+  -fx-text-fill: #fff;
+}
+
+/* Danger Button (Red) */
+.btn-danger {
+    -fx-background-color: #d9534f;
+    -fx-border-color: #d43f3a;
+    -fx-text-fill: #fff;
+}
+.btn-danger:focus {
+  -fx-background-color: #c9302c;
+  -fx-border-color: #761c19;
+  -fx-text-fill: #fff;
+}
+.btn-danger:hover {
+  -fx-background-color: #c9302c;
+  -fx-border-color: #ac2925;
+  -fx-text-fill: #fff;
+}
+
+/* http://getbootstrap.com/css/#forms */
+.form-control {
+	-fx-border-color: #ccc;
+	-fx-border-radius: .25em;
+	-fx-border-style: solid;
+	-fx-border-width: 1px;
+}
