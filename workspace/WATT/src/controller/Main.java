@@ -28,7 +28,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import watt.TestCase;
+import watt.TestRunner;
+import watt.UiHelpers;
 import watt.Watt;
 
 @SuppressWarnings({"restriction", "rawtypes", "unchecked"})
@@ -157,7 +160,6 @@ public class Main {
 		}
 		// Clear any Test Step(s) in the container
 		Watt.testStepsContainer.getChildren().clear();
-
 	}
 
 	public static void RemoveStep(MouseEvent mouseEvent) {
@@ -195,6 +197,12 @@ public class Main {
 				Watt.browserStage.setMinHeight(480);
 				// Set a minimum width for the application (stage) window
 				Watt.browserStage.setMinWidth(320);
+				// Set the On-Close action
+				Watt.browserStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			          public void handle(WindowEvent windowEvent) {
+			        	  Watt.browserStage = null;
+			          }
+				});
 				// Show the application (stage) window
 				Watt.browserStage.show();
 	        	// Open the window to the right of the primary stage
@@ -220,21 +228,32 @@ public class Main {
 	}
 
 	public void Play() {
-		// Get the Stop button
-		Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
-		// Enable the Stop button
-		stopLabel.setDisable(false);
-		// Get the Play label
-		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
-		// Stop recording
-		if (Watt.recording) { Record(); }
-		// Disable recording
-		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
-		recordingLabel.setDisable(true);
-		// Disable the Play button
-		playLabel.setDisable(true);
-		// Start Playing
-		Watt.playing = true;
+		if (Watt.browserStage != null) {
+			if (Watt.testStepsContainer.getChildren().size() > 0) {
+				// Get the Stop button
+				Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
+				// Enable the Stop button
+				stopLabel.setDisable(false);
+				// Get the Play label
+				Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
+				// Stop recording
+				if (Watt.recording) { Record(); }
+				// Disable recording
+				Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
+				recordingLabel.setDisable(true);
+				// Disable the Play button
+				playLabel.setDisable(true);
+				// Set Playing flag
+				Watt.playing = true;
+				// Set/Reset queueIndex for the Test Runner
+				TestRunner.queueIndex = 0;
+				// Start the Test Runner
+				TestRunner.NextTask();
+			}
+		}
+		else {
+			// TODO: Handle the browser window not being open
+		}
 	}
 
 	public void Record() {
@@ -268,18 +287,14 @@ public class Main {
 	}
 
 	public void Stop() {
-		// Get the Play label
-		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
+		// Enable the Add Step button
+		UiHelpers.AddStepButtonEnabled(true);
 		// Enable the Play button
-		playLabel.setDisable(false);
-		// Get the Recording label
-		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
+		UiHelpers.PlayButtonEnabled(true);
 		// Enable the Record button
-		recordingLabel.setDisable(false);
-		// Get the Stop button
-		Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
+		UiHelpers.RecordButtonEnabled(true);
 		// Disable the Stop button
-		stopLabel.setDisable(true);
+		UiHelpers.StopButtonEnabled(false);
 		// Stop Playing
 		Watt.playing = false;
 	}
@@ -422,7 +437,10 @@ public class Main {
                     {
 						// Get the address bar
 						TextField addressBar = (TextField) Watt.browserStage.getScene().lookup("#addressBar");
+						// Update the address bar
 						addressBar.setText(Watt.webEngine.getLocation());
+						// Complete any currently executing test step
+						TestRunner.CompleteTask();
                     }
 				}
             }
@@ -436,6 +454,7 @@ public class Main {
 			return true;
 		}
 		else {
+			Watt.browserStage = null;
 			return false;
 		}
 	}

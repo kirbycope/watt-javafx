@@ -106,5 +106,4 @@ public class Watt extends Application {
 		// Set options for "Command" ComboBox
 		command.setItems(options);
 	}
-
 }

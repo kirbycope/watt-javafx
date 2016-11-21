@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import watt.BaseUrl;
@@ -8,10 +7,9 @@ import watt.Watt;
 
 public class Browser {
 
-	private void ExecuteScript(String script) {
-		Platform.runLater(() -> {
-	        Watt.webEngine.executeScript(script);
-	    });
+	public static void ExecuteScript(String script) {
+		System.out.println("Script |:| " + script);
+		Watt.webEngine.executeScript(script);
 	}
 
 	public void Back() {
@@ -59,5 +57,4 @@ public class Browser {
 			Main.AddStep("Reload", "refresh", null, null);
 		}
 	}
-
 }

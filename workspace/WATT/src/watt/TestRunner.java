@@ -1,0 +1,93 @@
+package watt;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import model.TestStep;
+
+public class TestRunner {
+
+	public static int queueIndex;
+	public static boolean result;
+
+	public static void CompleteTask() {
+		if (result) {
+			// TODO: Pass Test Step
+		}
+		else {
+			// TODO: Fail Test Step
+		}
+		// Increment the queueIndex
+		queueIndex++;
+		if (queueIndex == Watt.testStepsContainer.getChildren().size()) {
+			// Enable the Add Step button
+			UiHelpers.AddStepButtonEnabled(true);
+			// Enable the Play button
+			UiHelpers.PlayButtonEnabled(true);
+			// Enable the Record button
+			UiHelpers.RecordButtonEnabled(true);
+			// Disable the Stop button
+			UiHelpers.StopButtonEnabled(false);
+			// Stop Playing
+			Watt.playing = false;
+			// TODO: Complete test
+			System.out.println("Test Complete!");
+		}
+		else {
+			// Execute the next task
+			NextTask();
+		}
+	}
+
+	public static void NextTask() {
+		if (Watt.playing) {
+			// Define the Test Step
+			TestStep testStep = GetCurrentTestStepDetails();
+			// Set the method to run based on the Test Step's Command
+			Method method = null;
+			try {
+				method = testStep.getClass().getMethod(testStep.Command);
+			} catch (NoSuchMethodException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// Execute the method
+			try {
+				method.invoke(testStep);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static TestStep GetCurrentTestStepDetails() {
+		// Create a new Test Step object
+		TestStep testStep = new TestStep();
+		// Get the Test Step container
+		VBox vbox = (VBox) Watt.testStepsContainer.getChildren().get(queueIndex);
+		// Get the first row of the Test Step container
+		HBox firstRow = (HBox) vbox.getChildren().get(0);
+		// Get the Description
+		testStep.Description = ((TextField) firstRow.getChildren().get(1)).getText();
+		// Get the second row of the Test Step container
+		HBox secondRow = (HBox) vbox.getChildren().get(1);
+		// Get the Command
+		testStep.Command = (String) ((ComboBox) secondRow.getChildren().get(0)).getValue();
+		// Get the third row of the Test Step container
+		HBox thirdRow = (HBox) vbox.getChildren().get(2);
+		// Get the Target
+		testStep.Target = ((TextField) thirdRow.getChildren().get(0)).getText();
+		// Get the fourth row of the Test Step container
+		HBox fourthRow = (HBox) vbox.getChildren().get(3);
+		// Get the Value
+		testStep.Value =  ((TextField) fourthRow.getChildren().get(0)).getText();
+		// Return the defined Test Step
+		return testStep;
+	}
+}

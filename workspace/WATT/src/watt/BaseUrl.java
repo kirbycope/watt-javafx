@@ -1,22 +1,41 @@
 package watt;
 
-import javafx.scene.control.TextField;
-
 public class BaseUrl {
+
+	private static String GetBaseUrlFromUi() {
+		return UiHelpers.GetBaseUrlField().getText();
+	}
+
 	/**
-	 * Gets the Base URL from the TextField and returns the full URL with the Base removed.
-	 * @param fullUrl
+	 * Gets the Base URL from the UI and returns the given URL with the Base URL substring added.
+	 * @param url
 	 * @return
 	 */
-	public static String StubUrl(String fullUrl) {
-		// Get the Base URL field
-		TextField tfBaseUrl = (TextField) Watt.primaryStage.getScene().lookup("#base-url");
-		String baseUrl = tfBaseUrl.getText();
-		if (fullUrl.startsWith(baseUrl)) {
-			return fullUrl.replace(baseUrl, "");
+	public static String FullUrl(String url) {
+		// Get the Base URL
+		String baseUrl = GetBaseUrlFromUi();
+		if ( (baseUrl.length() > 0) && (url.startsWith("/")) ) {
+			return baseUrl + url;
 		}
 		else {
-			return fullUrl;
+			return url;
+		}
+	}
+
+	/**
+	 * Gets the Base URL from the UI and returns the given URL with the Base URL substring removed.
+	 * @param url
+	 * @return
+	 */
+	public static String StubUrl(String url) {
+		// Get the Base URL
+		String baseUrl = GetBaseUrlFromUi();
+		// Handle presence of Base URL in the given URL
+		if (url.startsWith(baseUrl)) {
+			return url.replace(baseUrl, "");
+		}
+		else {
+			return url;
 		}
 	}
 }
