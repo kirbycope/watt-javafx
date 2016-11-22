@@ -34,7 +34,7 @@ import watt.TestRunner;
 import watt.UiHelpers;
 import watt.Watt;
 
-@SuppressWarnings({"restriction", "rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Main {
 
 	private void AddBrowserEventListeners() {
@@ -66,6 +66,19 @@ public class Main {
 				}
             }
 		);
+	}
+
+	public void AddStep() {
+		// Get the "Description"
+		TextField description = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-description");
+		// Get the "Command"
+		ComboBox command = (ComboBox) Watt.primaryStage.getScene().lookup("#test-step-builder-command");
+		// Get the "Target"
+		TextField target = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-target");
+		// Get the "Value"
+		TextField value = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-value");
+		// Add step to test steps pane
+		AddStep(description.getText(), command.getValue(), target.getText(), value.getText());
 	}
 
 	public static void AddStep(String description, Object command, String target, String value) {
@@ -191,19 +204,6 @@ public class Main {
 		// Re-add Test Step Container to the ScrollPane
 		ScrollPane testStepsScrollPane = (ScrollPane) Watt.primaryStage.getScene().lookup("#test-step-scrollpane");
 		testStepsScrollPane.setContent(Watt.testStepsContainer);
-	}
-
-	public void AddStep() {
-		// Get the "Description"
-		TextField description = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-description");
-		// Get the "Command"
-		ComboBox command = (ComboBox) Watt.primaryStage.getScene().lookup("#test-step-builder-command");
-		// Get the "Target"
-		TextField target = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-target");
-		// Get the "Value"
-		TextField value = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-value");
-		// Add step to test steps pane
-		AddStep(description.getText(), command.getValue(), target.getText(), value.getText());
 	}
 
 	private boolean BrowserIsOpen() {
@@ -457,6 +457,7 @@ public class Main {
 			}
 		}
 		else {
+			UiHelpers.ShowToast("Browser not open!");
 			// TODO: Handle the browser window not being open
 		}
 	}

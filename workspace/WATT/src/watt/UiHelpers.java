@@ -1,6 +1,7 @@
 package watt;
 
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -65,6 +66,31 @@ public class UiHelpers {
 		styleClasses.remove("test-step-container-skipped");
 		// Return the styles
 		return styleClasses;
+	}
+
+	public static void ShowToast(String text) {
+		// Get the toaster
+		HBox toaster = (HBox) Watt.primaryStage.getScene().lookup("#toaster");
+		// Show the toaster
+		toaster.setManaged(true);
+		toaster.setVisible(true);
+		// Get the toast
+		Label toast = (Label) Watt.primaryStage.getScene().lookup("#toast");
+		// Set toast's text
+		toast.setText(text);
+
+		Task<Void> task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				// Wait
+				Thread.sleep(3500);
+				// Hide the toaster
+				toaster.setManaged(false);
+				toaster.setVisible(false);
+				return null;
+			}
+		};
+		new Thread(task).start();
 	}
 
 	public static void StopButtonEnabled(boolean value) {

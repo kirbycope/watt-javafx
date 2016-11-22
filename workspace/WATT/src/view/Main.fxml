@@ -14,6 +14,7 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TextField?>
 <?import com.sun.javafx.scene.control.skin.InputField?>
+<?import javafx.scene.layout.StackPane?>
 
 <VBox styleClass="app-wrapper" stylesheets="/assets/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Main">
 	<children>
@@ -82,7 +83,7 @@
 						<Tooltip text="Record" />
 					</tooltip>
 				</Label>
-				<Label id="clear-results" onMouseClicked="#ClearResults" disable="true" styleClass="test-step-header-button" text="❌">
+				<Label id="clear-results" disable="true" onMouseClicked="#ClearResults" styleClass="test-step-header-button" text="❌">
 					<HBox.margin>
 						<Insets bottom="0" left="6" right="6" top="0" />
 					</HBox.margin>
@@ -124,59 +125,74 @@
    			</children>
    		</HBox>
    		<ScrollPane id="test-step-scrollpane" fitToHeight="true" fitToWidth="true" styleClass="edge-to-edge" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
-   		<VBox styleClass="test-step-builder-wrapper">
-	   		<VBox.margin>
-	            <Insets bottom="6" left="0" right="0" top="0" />
-	         </VBox.margin>
+   		<StackPane>
+   			<VBox.margin>
+            	<Insets bottom="6.0" />
+			</VBox.margin>
    			<children>
-				<TextField id="test-step-builder-description" promptText="Description" styleClass="form-control" HBox.hgrow="ALWAYS">
-	               <VBox.margin>
-	                  <Insets left="6.0" right="6.0" top="6.0" />
-					</VBox.margin>
-				</TextField>
-				<ComboBox id="test-step-builder-command" promptText="Command">
-					<VBox.margin>
-						<Insets left="6.0" right="6.0" />
-					</VBox.margin>
-					<styleClass>
-						<String fx:value="combo-box" />
-						<String fx:value="form-control" />
-					</styleClass>
-				</ComboBox>
-   				<TextField id="test-step-builder-target" promptText="Target" styleClass="form-control" HBox.hgrow="ALWAYS">
-					<VBox.margin>
-						<Insets left="6.0" right="6.0" />
-					</VBox.margin>
-				</TextField>
-   				<TextField id="test-step-builder-value" promptText="Value" styleClass="form-control" HBox.hgrow="ALWAYS">
-					<VBox.margin>
-						<Insets left="6.0" right="6.0" />
-					</VBox.margin>
-				</TextField>
-   				<HBox>
+   				<VBox styleClass="test-step-builder-wrapper">
+		   			<children>
+						<TextField id="test-step-builder-description" promptText="Description" styleClass="form-control" HBox.hgrow="ALWAYS">
+			               <VBox.margin>
+			                  <Insets left="6.0" right="6.0" top="6.0" />
+							</VBox.margin>
+						</TextField>
+						<ComboBox id="test-step-builder-command" promptText="Command">
+							<VBox.margin>
+								<Insets left="6.0" right="6.0" />
+							</VBox.margin>
+							<styleClass>
+								<String fx:value="combo-box" />
+								<String fx:value="form-control" />
+							</styleClass>
+						</ComboBox>
+		   				<TextField id="test-step-builder-target" promptText="Target" styleClass="form-control" HBox.hgrow="ALWAYS">
+							<VBox.margin>
+								<Insets left="6.0" right="6.0" />
+							</VBox.margin>
+						</TextField>
+		   				<TextField id="test-step-builder-value" promptText="Value" styleClass="form-control" HBox.hgrow="ALWAYS">
+							<VBox.margin>
+								<Insets left="6.0" right="6.0" />
+							</VBox.margin>
+						</TextField>
+		   				<HBox>
+		   					<children>
+		   						<Button id="test-step-builder-add-step" onMouseClicked="#AddStep" text="Add Step">
+		   							<styleClass>
+										<String fx:value="btn" />
+										<String fx:value="btn-success" />
+									</styleClass>
+									<HBox.margin>
+										<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+									</HBox.margin>
+								</Button>
+		   						<Pane HBox.hgrow="ALWAYS" />
+		   						<Button id="test-step-builder-clear-form" onMouseClicked="#ClearForm" text="Clear Form">
+		   							<styleClass>
+										<String fx:value="btn" />
+										<String fx:value="btn-danger" />
+									</styleClass>
+									<HBox.margin>
+										<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+									</HBox.margin>
+								</Button>
+		   					</children>
+		   				</HBox>
+		   			</children>
+		   		</VBox>
+   				<HBox id="toaster" managed="false" visible="false" alignment="BOTTOM_CENTER">
    					<children>
-   						<Button id="test-step-builder-add-step" onMouseClicked="#AddStep" text="Add Step">
-   							<styleClass>
-								<String fx:value="btn" />
-								<String fx:value="btn-success" />
-							</styleClass>
-							<HBox.margin>
-								<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
-							</HBox.margin>
-						</Button>
    						<Pane HBox.hgrow="ALWAYS" />
-   						<Button id="test-step-builder-clear-form" onMouseClicked="#ClearForm" text="Clear Form">
-   							<styleClass>
-								<String fx:value="btn" />
-								<String fx:value="btn-danger" />
-							</styleClass>
+   						<Label id="toast" styleClass="toast" textAlignment="CENTER">
 							<HBox.margin>
-								<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+							   <Insets bottom="6.0" />
 							</HBox.margin>
-						</Button>
+						</Label>
+   						<Pane HBox.hgrow="ALWAYS" />
    					</children>
    				</HBox>
    			</children>
-   		</VBox>
+   		</StackPane>
    </children>
 </VBox>

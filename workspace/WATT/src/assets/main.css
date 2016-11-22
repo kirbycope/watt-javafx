@@ -89,6 +89,14 @@
 	-fx-background-color: #fff;
 }
 
+.toast {
+	-fx-background-color: #656565;
+	-fx-background-radius: 1em;
+	-fx-fill: #fff;
+	-fx-padding: .5em 1em .5em 1em;
+	-fx-text-fill: #fff;
+}
+
 /* http://getbootstrap.com/css/#buttons */
 .btn {
   -fx-border-color: transparent;
