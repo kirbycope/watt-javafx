@@ -61,8 +61,8 @@ public class UiHelpers {
 		// Get the styleClass of the first row
 		ObservableList<String> styleClasses = firstRow.getStyleClass();
 		// Remove all know style classes
+		styleClasses.remove("test-step-container-failed");
 		styleClasses.remove("test-step-container-passed");
-		styleClasses.remove("test-step-container-skipped");
 		styleClasses.remove("test-step-container-skipped");
 		// Return the styles
 		return styleClasses;
@@ -78,11 +78,11 @@ public class UiHelpers {
 		Label toast = (Label) Watt.primaryStage.getScene().lookup("#toast");
 		// Set toast's text
 		toast.setText(text);
-
+		// Set a background Task to close the toaster after 3.5 seconds
 		Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				// Wait
+				// Wait 3.5 seconds
 				Thread.sleep(3500);
 				// Hide the toaster
 				toaster.setManaged(false);
@@ -90,6 +90,7 @@ public class UiHelpers {
 				return null;
 			}
 		};
+		// Start the Task
 		new Thread(task).start();
 	}
 
@@ -144,5 +145,4 @@ public class UiHelpers {
 			recordingLabel.getTooltip().setText("Stop Recording");
 		}
 	}
-
 }

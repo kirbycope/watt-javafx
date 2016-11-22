@@ -89,21 +89,25 @@ public class Watt extends Application {
 				,"goBack"
 				,"goForward" // Selenium IDE ✘ | Selenium ✔
 				,"open"
-				,"openAndWait"
+				,"openAndWait" // Selenium IDE ✘ | Selenium ✔
 				,"pause"
 				,"refresh"
+				,"runScript"
 				,"select"
-				,"store"
+				//,"store"
 				,"submit"
 				,"type"
-				,"waitForElementPresent"
-				,"waitForLocation"
-				,"waitForText"
-				,"waitForTitle"
+				,"verifyChecked"
+				,"verifyElementNotPresent"
 				,"verifyElementPresent"
+				,"verifyNotChecked"
 				,"verifyText"
 				,"verifyTitle"
 				,"verifyLocation"
+				//,"waitForElementPresent"
+				,"waitForLocation"
+				//,"waitForText"
+				//,"waitForTitle"
 			);
 		// Set options for "Command" ComboBox
 		command.setItems(options);

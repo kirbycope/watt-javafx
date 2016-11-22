@@ -1,6 +1,7 @@
 package model;
 
 import controller.Browser;
+import javafx.concurrent.Task;
 import watt.BaseUrl;
 import watt.TestRunner;
 
@@ -79,9 +80,21 @@ public class TestStep {
 	}
 
 	public void pause() {
-		// Pause
-		Browser.ExecuteScript("setTimeout( function(){/* TODO: CompleteTask */}, " + this.Target + " );");
-		// TODO: The function ran after the timeout needs to communicate from the WebView to the JavaFx app to complete the task
+		// Get the length of time to wait (in milliseconds)
+		Long time = Long.parseLong(this.Target);
+		// Set a background Task to wait the given length of time (in milliseconds)
+		Task<Void> task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				// Wait the given length of time (in milliseconds)
+				Thread.sleep(time);
+				// Complete Task
+				TestRunner.CompleteTask("pass");
+				return null;
+			}
+		};
+		// Start the Task
+		new Thread(task).start();
 	}
 
 	public void refresh() {
@@ -105,22 +118,185 @@ public class TestStep {
 	}
 
 	public void select() {
-		// TODO
+		// Get the element selector
+		String selector = GetSelector();
+		// Get the option locator
+		String optionLocator = this.Value;
+		// Create a variable to hold the JavaScript string
+		String javaScript = "";
+		// Handle option locator type
+		if (optionLocator.startsWith("label=")) {
+			// Trim off label=
+			optionLocator = optionLocator.replace("label=", "");
+			// Build the JavaScript string
+			StringBuilder sb = new StringBuilder();
+			sb.append("var select = " + selector + ";");
+			sb.append("for (var i = 0; i < select.options.length; i++) {");
+				sb.append("if (select.options[i].text === '" + optionLocator + "') {");
+					sb.append("select.selectedIndex = i;");
+					sb.append("break;");
+				sb.append("}");
+			sb.append("}");
+			// Select the option by label
+			javaScript = sb.toString();
+		}
+		else if (optionLocator.startsWith("value=")) {
+			// Trim off value=
+			optionLocator = optionLocator.replace("value=", "");
+			// Select the option by value
+			javaScript = selector + ".value = '" + optionLocator + "'";
+		}
+		else if (optionLocator.startsWith("id=")) {
+			// Trim off id=
+			optionLocator = optionLocator.replace("id=", "");
+			// Select the option by id
+			javaScript = "document.getElementById('#" + optionLocator + "').selected = true;";
+		}
+		else if (optionLocator.startsWith("index=")) {
+			// Trim off index=
+			optionLocator = optionLocator.replace("index=", "");
+			// Select the option by id
+			javaScript = selector + ".selectedIndex = " + optionLocator + "";
+		}
+		// Select the option
+		Object result = Browser.ExecuteScript(javaScript);
+		// Handle the result
+		if ( (result != null) && (!result.equals("undefined")) ) {
+			// Complete Task
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			// Complete Task
+			TestRunner.CompleteTask("fail");
+		}
 	}
 
 	public void store() {
-		// TODO
+		// TODO: Store in JavaFx
 	}
 
 	public void submit() {
-		// TODO
+		// Get the element selector
+		String selector = GetSelector();
+		// Submit the form
+		Browser.ExecuteScript(selector + ".submit()");
+		// Complete Task
+		TestRunner.CompleteTask("pass");
+	}
+
+	public void submitAndWait() {
+		// Get the element selector
+		String selector = GetSelector();
+		// Submit the form
+		Browser.ExecuteScript(selector + ".submit()");
+		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
 	public void type() {
-		// TODO
+		// Get the element selector
+		String selector = GetSelector();
+		// Type value in the target element
+		Browser.ExecuteScript(selector + ".value='" + this.Value + "'");
+		// Complete Task
+		TestRunner.CompleteTask("pass");
 	}
 
-	private String GetSelector() {
+	public void verifyChecked() {
+		// Get the element selector
+		String selector = GetSelector();
+		// Get the element's checked value
+		Object result = Browser.ExecuteScript(selector + ".checked");
+		// Handle result
+		if (result.equals("true")) {
+			// Complete Task
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			// Complete Task
+			TestRunner.CompleteTask("fail");
+		}
+	}
+
+	public void verifyElementNotPresent() {
+		// Check if element is present and pass/fail accordingly
+		if (IsElementPresent()) {
+			TestRunner.CompleteTask("fail");
+		}
+		else {
+			TestRunner.CompleteTask("pass");
+		}
+	}
+
+	public void verifyElementPresent() {
+		// Check if element is present and pass/fail accordingly
+		if (IsElementPresent()) {
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			TestRunner.CompleteTask("fail");
+		}
+	}
+
+	public void verifyNotChecked() {
+		// Get the element selector
+		String selector = GetSelector();
+		// Get the element's checked value
+		Object result = Browser.ExecuteScript(selector + ".checked");
+		// Handle result
+		if (result.equals("false")) {
+			// Complete Task
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			// Complete Task
+			TestRunner.CompleteTask("fail");
+		}
+	}
+
+	public void verifyText() {
+		// Get the element selector
+		String selector = GetSelector();
+		// Get the element's text
+		Object result = Browser.ExecuteScript(selector + ".textContent");
+		// Pass/fail test accordingly
+		if (result.equals(this.Target)) {
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			TestRunner.CompleteTask("fail");
+		}
+	}
+
+	public void verifyTitle() {
+		// Get the current title
+		Object result = Browser.ExecuteScript("document.title");
+		// Pass/fail test accordingly
+		if (result.equals(this.Target)) {
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			TestRunner.CompleteTask("fail");
+		}
+	}
+
+	public void verifyLocation() {
+		// Get the current location
+		Object result = Browser.ExecuteScript("document.location.href");
+		// Pass/fail test accordingly
+		if (result.equals(this.Target)) {
+			TestRunner.CompleteTask("pass");
+		}
+		else {
+			TestRunner.CompleteTask("fail");
+		}
+	}
+
+	public void waitForLocation() {
+		WaitFor("document.location.href == '" + this.Target + "'");
+		// Note: the result is handled by the background task
+	}
+
+ 	private String GetSelector() {
 		// Initialize the selector
 		String selector = null;
 		// Get the element locator
@@ -164,5 +340,52 @@ public class TestStep {
 			// TODO
 		}
 		return selector;
+	}
+
+	private boolean IsElementPresent() {
+		// Get the element selector
+		String selector = GetSelector();
+		// Locate the element
+		Object result = Browser.ExecuteScript(selector);
+		// Parse and return the result
+		if (result != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	// Waits (up to 30 seconds) for the script to return "true"
+	private void WaitFor(String javaScript) {
+
+		// TODO: The following code is WiP/PoC
+
+		// Set a background Task
+		Task<Void> task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				for (int i = 0; i < 120; i++) {
+					// Check condition
+					Object result = Browser.ExecuteScript(javaScript);
+					System.out.println("result: " + result);
+					if (result.equals(true)) {
+						// Complete Task
+						TestRunner.CompleteTask("pass");
+						break;
+					}
+					else {
+						// Wait 1/4 second
+						Thread.sleep(250);
+					}
+				}
+				// Complete Task (if we didn't break out before now)
+				TestRunner.CompleteTask("fail");
+
+				return null;
+			}
+		};
+		// Start the Task
+		new Thread(task).start();
 	}
 }
