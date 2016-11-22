@@ -82,7 +82,7 @@
 						<Tooltip text="Record" />
 					</tooltip>
 				</Label>
-				<Label id="clear-results" disable="true" styleClass="test-step-header-button" text="❌">
+				<Label id="clear-results" onMouseClicked="#ClearResults" disable="true" styleClass="test-step-header-button" text="❌">
 					<HBox.margin>
 						<Insets bottom="0" left="6" right="6" top="0" />
 					</HBox.margin>

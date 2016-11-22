@@ -93,6 +93,8 @@ public class Watt extends Application {
 				,"pause"
 				,"refresh"
 				,"select"
+				,"store"
+				,"submit"
 				,"type"
 				,"waitForElementPresent"
 				,"waitForLocation"

@@ -62,6 +62,16 @@
     -fx-background-insets: 0 0 5px 0;
 }
 
+.test-step-container-failed {
+	-fx-background-color: #f2dede;
+	/* -fx-border-color: #ebccd1; */
+}
+
+.test-step-container-passed {
+	-fx-background-color: #dff0d8;
+	/* -fx-border-color: #d6e9c6; */
+}
+
 .duplicate-test-step {
 	-fx-fill: #fff;
 	-fx-text-fill: #fff;

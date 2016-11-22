@@ -7,9 +7,11 @@ import watt.Watt;
 
 public class Browser {
 
-	public static void ExecuteScript(String script) {
+	public static Object ExecuteScript(String script) {
 		System.out.println("Script |:| " + script);
-		Watt.webEngine.executeScript(script);
+		Object result = Watt.webEngine.executeScript(script);
+		System.out.println("Result |:| " + result);
+		return result;
 	}
 
 	public void Back() {

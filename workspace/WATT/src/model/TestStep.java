@@ -24,14 +24,30 @@ public class TestStep {
 		// Click the element
 		Browser.ExecuteScript(selector + ".click()");
 		// Complete Task
-		TestRunner.CompleteTask();
+		TestRunner.CompleteTask("pass");
+	}
+
+	public void clickAndWait() {
+		// Get the element selector
+		String selector = GetSelector();
+		// Click the element
+		Browser.ExecuteScript(selector + ".click()");
+		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
+	}
+
+	public void deleteAllVisibleCookies() {
+		// Delete all cookies visible to the current location
+		// Source: http://stackoverflow.com/a/27374365/6933359
+		Browser.ExecuteScript("document.cookie.split(';').forEach(function(c) { document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/'); });");
+		// Complete Task
+		TestRunner.CompleteTask("pass");
 	}
 
 	public void goBack() {
 		// Go Back
 		Browser.ExecuteScript("history.back()");
 		// Complete Task
-		TestRunner.CompleteTask();
+		TestRunner.CompleteTask("pass");
 	}
 
 	public void goBackAndWait() {
@@ -44,7 +60,7 @@ public class TestStep {
 		// Go Forward
 		Browser.ExecuteScript("history.forward()");
 		// Complete Task
-		TestRunner.CompleteTask();
+		TestRunner.CompleteTask("pass");
 	}
 
 	public void goForwardAndWait() {
@@ -60,6 +76,48 @@ public class TestStep {
 		// Open the URL in the WebView
 		Browser.ExecuteScript("location.href='" + url + "'");
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
+	}
+
+	public void pause() {
+		// Pause
+		Browser.ExecuteScript("setTimeout( function(){/* TODO: CompleteTask */}, " + this.Target + " );");
+		// TODO: The function ran after the timeout needs to communicate from the WebView to the JavaFx app to complete the task
+	}
+
+	public void refresh() {
+		// Reload page
+		Browser.ExecuteScript("location.reload();");
+		// Complete Task
+		TestRunner.CompleteTask("pass");
+	}
+
+	public void refreshAndWait() {
+		// Reload page
+		Browser.ExecuteScript("location.reload();");
+		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
+	}
+
+	public void runScript() {
+		// Run the script
+		Browser.ExecuteScript(this.Target);
+		// Complete Task
+		TestRunner.CompleteTask("pass");
+	}
+
+	public void select() {
+		// TODO
+	}
+
+	public void store() {
+		// TODO
+	}
+
+	public void submit() {
+		// TODO
+	}
+
+	public void type() {
+		// TODO
 	}
 
 	private String GetSelector() {
