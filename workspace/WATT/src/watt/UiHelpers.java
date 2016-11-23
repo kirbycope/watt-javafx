@@ -1,7 +1,8 @@
 package watt;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
@@ -40,15 +41,18 @@ public class UiHelpers {
 	public static void LoadCommandOptions(ComboBox command) {
 		// Get all the methods of the TestStepCommands class
 		Method[] methods = TestStepCommands.class.getDeclaredMethods();
-		// For each method in the array, add to a String Array
-		ArrayList<String> methodNames = new ArrayList<String>();
-		for (Method method : methods) {
-			methodNames.add(method.getName());
+		// Create a variable to hold the method names
+		Object[] methodNames = new String[methods.length];
+		// Iterate through the list of methods
+		//for (Method method : methods) {
+		for (int i = 0; i < methods.length; i++) {
+			methodNames[i] = methods[i].getName();
 		}
 		// Array is in random order, sort it
-		// TODO
+		Arrays.sort(methodNames);
 		// Add the method name to the list of options
 		//command.getItems().add(method.getName());
+		command.getItems().addAll(methodNames);
 	}
 
  	public static void PlayButtonEnabled(boolean value) {

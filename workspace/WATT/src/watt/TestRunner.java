@@ -1,6 +1,5 @@
 package watt;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import controller.Browser;
@@ -59,15 +58,13 @@ public class TestRunner {
 			Method method = null;
 			try {
 				method = testStep.getClass().getMethod(testStep.Command);
-			} catch (NoSuchMethodException | SecurityException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			// Execute the method
 			try {
 				method.invoke(testStep);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

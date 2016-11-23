@@ -34,7 +34,7 @@ import watt.TestRunner;
 import watt.UiHelpers;
 import watt.Watt;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "restriction"})
 public class Main {
 
 	private void AddBrowserEventListeners() {
@@ -463,7 +463,7 @@ public class Main {
 	}
 
 	public void Record() {
-		// Toggle recording button state
+		// Toggle recording button state (also changes the recording flag)
 		UiHelpers.ToggleRecordButton();
 		// TODO
 	}

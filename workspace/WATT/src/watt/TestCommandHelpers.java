@@ -8,6 +8,7 @@ import controller.Browser;
 import javafx.application.Platform;
 
 public class TestCommandHelpers {
+
 	public static boolean IsElementPresent(String selector) {
 		// Locate the element
 		Browser.ExecuteScript(selector);
