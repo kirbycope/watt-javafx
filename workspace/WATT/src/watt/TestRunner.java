@@ -3,6 +3,7 @@ package watt;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import controller.Browser;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -50,6 +51,8 @@ public class TestRunner {
 
 	public static void NextTask() {
 		if (Watt.playing) {
+			// Reset the scriptResult flag
+			Browser.scriptResult = null;
 			// Define the Test Step
 			TestStep testStep = GetCurrentTestStepDetails();
 			// Set the method to run based on the Test Step's Command

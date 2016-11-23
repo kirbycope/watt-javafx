@@ -1,9 +1,12 @@
 package watt;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -33,7 +36,22 @@ public class UiHelpers {
 		return (VBox) Watt.testStepsContainer.getChildren().get(TestRunner.queueIndex);
 	}
 
-	public static void PlayButtonEnabled(boolean value) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void LoadCommandOptions(ComboBox command) {
+		// Get all the methods of the TestStepCommands class
+		Method[] methods = TestStepCommands.class.getDeclaredMethods();
+		// For each method in the array, add to a String Array
+		ArrayList<String> methodNames = new ArrayList<String>();
+		for (Method method : methods) {
+			methodNames.add(method.getName());
+		}
+		// Array is in random order, sort it
+		// TODO
+		// Add the method name to the list of options
+		//command.getItems().add(method.getName());
+	}
+
+ 	public static void PlayButtonEnabled(boolean value) {
 		// Get the Play button
 		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
 		// Handle request

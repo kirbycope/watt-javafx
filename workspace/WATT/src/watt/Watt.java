@@ -2,8 +2,6 @@ package watt;
 
 import java.io.IOException;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +19,6 @@ public class Watt extends Application {
 	public static boolean playing;
 	public static boolean recording;
 	public static VBox testStepsContainer;
-	public static ObservableList<String> options;
 	public static Stage browserStage;
 	public static WebEngine webEngine;
 
@@ -72,7 +69,7 @@ public class Watt extends Application {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("rawtypes")
 	private void LoadCommandOptions() {
 		// Get the "Command" ComboBox
 		ComboBox command = (ComboBox) primaryStage.getScene().lookup("#test-step-builder-command");
@@ -81,35 +78,6 @@ public class Watt extends Application {
 		// Set the "Command" ComboBox width to match the "Description" TextField width
 		command.prefWidthProperty().bind(description.widthProperty());
 		// Define the list of options
-		options =
-			FXCollections.observableArrayList(
-				"click"
-				,"clickAndWait"
-				,"deleteAllVisibleCookies"
-				,"goBack"
-				,"goForward" // Selenium IDE ✘ | Selenium ✔
-				,"open"
-				,"openAndWait" // Selenium IDE ✘ | Selenium ✔
-				,"pause"
-				,"refresh"
-				,"runScript"
-				,"select"
-				//,"store"
-				,"submit"
-				,"type"
-				,"verifyChecked"
-				,"verifyElementNotPresent"
-				,"verifyElementPresent"
-				,"verifyNotChecked"
-				,"verifyText"
-				,"verifyTitle"
-				,"verifyLocation"
-				//,"waitForElementPresent"
-				,"waitForLocation"
-				//,"waitForText"
-				//,"waitForTitle"
-			);
-		// Set options for "Command" ComboBox
-		command.setItems(options);
+		UiHelpers.LoadCommandOptions(command);
 	}
 }

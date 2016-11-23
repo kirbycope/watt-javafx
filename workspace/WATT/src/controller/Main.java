@@ -138,7 +138,7 @@ public class Main {
 		cbCommand.prefWidthProperty().bind(firstRow.widthProperty());
 		cbCommand.setPromptText("Command");
 		// Define the list of options
-		cbCommand.setItems(Watt.options);
+		UiHelpers.LoadCommandOptions(cbCommand);
 		// Select the "Command"
 		cbCommand.setValue(command);
 		// Add element to second row
