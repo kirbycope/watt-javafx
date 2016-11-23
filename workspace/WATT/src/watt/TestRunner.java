@@ -45,7 +45,7 @@ public class TestRunner {
 		UiHelpers.ClearResultsButtonEnabled(true);
 
 
-		System.out.println("Test Complete!");
+		System.out.println("[TestRunner.java:48] Test Complete!");
 	}
 
 	public static void NextTask() {

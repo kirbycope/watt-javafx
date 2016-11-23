@@ -1,5 +1,10 @@
 package model;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import controller.Browser;
 import javafx.concurrent.Task;
 import watt.BaseUrl;
@@ -356,36 +361,25 @@ public class TestStep {
 		}
 	}
 
-	// Waits (up to 30 seconds) for the script to return "true"
-	private void WaitFor(String javaScript) {
-
-		// TODO: The following code is WiP/PoC
-
-		// Set a background Task
-		Task<Void> task = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				for (int i = 0; i < 120; i++) {
-					// Check condition
-					Object result = Browser.ExecuteScript(javaScript);
-					System.out.println("result: " + result);
-					if (result.equals(true)) {
-						// Complete Task
-						TestRunner.CompleteTask("pass");
-						break;
-					}
-					else {
-						// Wait 1/4 second
-						Thread.sleep(250);
-					}
-				}
-				// Complete Task (if we didn't break out before now)
-				TestRunner.CompleteTask("fail");
-
-				return null;
-			}
-		};
-		// Start the Task
-		new Thread(task).start();
+	// TODO: escape after 30 seconds
+	private void WaitFor(final String javaScript) {
+		// Get start time
+		//TODO
+		// Source: http://stackoverflow.com/a/15990400/6933359
+		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+	     exec.schedule(new Runnable() {
+	         public void run() {
+	        	 // Run the script
+	        	 Object result = Browser.ExecuteScript(javaScript);
+	        	 // Handle the result
+	        	 System.out.println(result);
+	        	 if (result.equals("true")){
+	        		 // Shutdown the ScheduledThreadPoolExecutor
+	        		 exec.shutdown();
+	        		 // Complete Test
+	        		 TestRunner.CompleteTask("pass");
+	        	 }
+	         }
+	     }, 250, TimeUnit.MILLISECONDS);
 	}
 }

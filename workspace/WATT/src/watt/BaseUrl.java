@@ -1,5 +1,7 @@
 package watt;
 
+import java.util.Optional;
+
 public class BaseUrl {
 
 	private static String GetBaseUrlFromUi() {
@@ -12,14 +14,20 @@ public class BaseUrl {
 	 * @return
 	 */
 	public static String FullUrl(String url) {
+		// Ensure that the given URL is not null
+		url = Optional.ofNullable(url).orElse("");
 		// Get the Base URL
 		String baseUrl = GetBaseUrlFromUi();
-		if ( (baseUrl.length() > 0) && (url.startsWith("/")) ) {
-			return baseUrl + url;
+		// Combine the Base URL and given URL
+		if (baseUrl.length() > 0) {
+			if ( (url.startsWith("/")) || (baseUrl.endsWith("/")) ) {
+				url = baseUrl + url;
+			}
+			else {
+				url = baseUrl + "/" + url;
+			}
 		}
-		else {
-			return url;
-		}
+		return url;
 	}
 
 	/**
@@ -28,14 +36,14 @@ public class BaseUrl {
 	 * @return
 	 */
 	public static String StubUrl(String url) {
+		// Ensure that the given URL is no null
+		url = Optional.ofNullable(url).orElse("");
 		// Get the Base URL
 		String baseUrl = GetBaseUrlFromUi();
 		// Handle presence of Base URL in the given URL
 		if (url.startsWith(baseUrl)) {
-			return url.replace(baseUrl, "");
+			url = url.replace(baseUrl, "");
 		}
-		else {
-			return url;
-		}
+		return url;
 	}
 }

@@ -8,9 +8,9 @@ import watt.Watt;
 public class Browser {
 
 	public static Object ExecuteScript(String script) {
-		System.out.println("Script |:| " + script);
+		System.out.println("[Browser.java:11] Script |:| " + script);
 		Object result = Watt.webEngine.executeScript(script);
-		System.out.println("Result |:| " + result);
+		System.out.println("[Browser.java:13] Result |:| " + result);
 		return result;
 	}
 
@@ -49,7 +49,7 @@ public class Browser {
 			String url = addressBar.getText();
 			ExecuteScript("location.href = '" + url + "'");
 		if (Watt.recording) {
-			Main.AddStep("Open: " + BaseUrl.StubUrl(url), "open", null, null);
+			Main.AddStep("Open: " + BaseUrl.StubUrl(url), "open", BaseUrl.StubUrl(url), null);
 		}
 	}
 
