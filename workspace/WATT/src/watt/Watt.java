@@ -57,6 +57,8 @@ public class Watt extends Application {
 			primaryStage.setMinHeight(480);
 			// Set a minimum width for the application (stage) window
 			primaryStage.setMinWidth(320);
+			// Set window to always on top
+			primaryStage.setAlwaysOnTop(true);
 			// Show the application (stage) window
 			primaryStage.show();
 			// Initialize the test step container
