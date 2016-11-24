@@ -7,11 +7,13 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.TestStep;
 
 public class UiHelpers {
 
@@ -35,6 +37,34 @@ public class UiHelpers {
 
 	public static VBox GetCurrentTestStepContiner() {
 		return (VBox) Watt.testStepsContainer.getChildren().get(TestRunner.queueIndex);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static TestStep GetTestStepDetails(VBox testStepContainer) {
+		// Get the first row of the Test Step container
+		HBox firstRow = (HBox) testStepContainer.getChildren().get(0);
+		// Get Execute Step
+		boolean executeStep = ((CheckBox) firstRow.getChildren().get(0)).isSelected();
+		// Get the Description
+		 String description = ((TextField) firstRow.getChildren().get(1)).getText();
+		// Get the second row of the Test Step container
+		HBox secondRow = (HBox) testStepContainer.getChildren().get(1);
+		// Get the Command
+		String command = (String) ((ComboBox) secondRow.getChildren().get(0)).getValue();
+		// Get the third row of the Test Step container
+		HBox thirdRow = (HBox) testStepContainer.getChildren().get(2);
+		// Get the Target
+		String target = ((TextField) thirdRow.getChildren().get(0)).getText();
+		// Get the fourth row of the Test Step container
+		HBox fourthRow = (HBox) testStepContainer.getChildren().get(3);
+		// Get the Value
+		String value =  ((TextField) fourthRow.getChildren().get(0)).getText();
+		// Get the fifth row of the Test Step container
+		HBox fifthRow = (HBox) testStepContainer.getChildren().get(4);
+		// Get the Continue on Failure
+		boolean continueOnFailure = ((CheckBox) fifthRow.getChildren().get(1)).isSelected();
+		// Return the new Test Step object
+		return new TestStep(executeStep, description, command, target, value, continueOnFailure);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -83,6 +113,7 @@ public class UiHelpers {
 		// Get the styleClass of the first row
 		ObservableList<String> styleClasses = firstRow.getStyleClass();
 		// Remove all know style classes
+		styleClasses.remove("test-step-container-current");
 		styleClasses.remove("test-step-container-failed");
 		styleClasses.remove("test-step-container-passed");
 		styleClasses.remove("test-step-container-skipped");
@@ -124,9 +155,9 @@ public class UiHelpers {
 	}
 
 	public static void StyleTestStepByResult(String result) {
-		VBox vbox = GetCurrentTestStepContiner();
+		VBox testStepContainer = GetCurrentTestStepContiner();
 		// Get/Reset the Test Steps's style
-		ObservableList<String> styleClasses = ResetTestStepStyle(vbox);
+		ObservableList<String> styleClasses = ResetTestStepStyle(testStepContainer);
 		// Handle the result
 		if (result.equals("pass")) {
 			// Update the styleClass of the firstRow
@@ -136,9 +167,12 @@ public class UiHelpers {
 			// Update the styleClass of the firstRow
 			styleClasses.add("test-step-container-failed");
 		}
-		else {
+		else if (result.equals("skip")){
 			// Update the styleClass of the firstRow
 			styleClasses.add("test-step-container-skipped");
+		}
+		else {
+			throw new UnsupportedOperationException("Result: " + result);
 		}
 	}
 
@@ -166,5 +200,15 @@ public class UiHelpers {
 			// Update the Tooltip
 			recordingLabel.getTooltip().setText("Stop Recording");
 		}
+	}
+
+
+	public static void StyleCurrentTestStep() {
+		// Get the current Test Step container
+		VBox testStepContainer = UiHelpers.GetCurrentTestStepContiner();
+		// Get/Reset the Test Steps's style
+		ObservableList<String> styleClasses = ResetTestStepStyle(testStepContainer);
+		// Update the styleClass of the firstRow
+		styleClasses.add("test-step-container-current");
 	}
 }

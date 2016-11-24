@@ -8,47 +8,58 @@ public class TestStepCommands {
 	public static void click(String selector) {
 		// Click the element
 		Browser.ExecuteScript(selector + ".click()");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void clickAndWait(String selector) {
 		// Click the element
 		Browser.ExecuteScript(selector + ".click()");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail");
+		}
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
 	public static void deleteAllVisibleCookies() {
 		// Delete all cookies visible to the current location
-		// Source: http://stackoverflow.com/a/27374365/6933359
-		Browser.ExecuteScript("document.cookie.split(';').forEach(function(c) { document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/'); });");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		TestCommandHelpers.DeleteAllVisibleCookies();
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void goBack() {
 		// Go Back
 		Browser.ExecuteScript("history.back()");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void goBackAndWait() {
 		// Go Back
 		Browser.ExecuteScript("history.back()");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail");
+		}
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
 	public static void goForward() {
 		// Go Forward
 		Browser.ExecuteScript("history.forward()");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void goForwardAndWait() {
 		// Go Forward
 		Browser.ExecuteScript("history.forward()");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail");
+		}
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
@@ -58,6 +69,10 @@ public class TestStepCommands {
 		String url = BaseUrl.FullUrl(target);
 		// Open the URL in the WebView
 		Browser.ExecuteScript("location.href='" + url + "'");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail");
+		}
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
@@ -67,9 +82,15 @@ public class TestStepCommands {
 		// Set a background Task to wait the given length of time (in milliseconds)
 		Task<Void> task = new Task<Void>() {
 			@Override
-			protected Void call() throws Exception {
+			protected Void call() {
 				// Wait the given length of time (in milliseconds)
-				Thread.sleep(time);
+				try {
+					Thread.sleep(time);
+				}
+				catch (Exception e) {
+					// Complete Task
+					TestRunner.CompleteTask("fail");
+				}
 				// Complete Task
 				TestRunner.CompleteTask("pass");
 				return null;
@@ -82,13 +103,17 @@ public class TestStepCommands {
 	public static void refresh() {
 		// Reload page
 		Browser.ExecuteScript("location.reload();");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void refreshAndWait() {
 		// Reload page
 		Browser.ExecuteScript("location.reload();");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail");
+		}
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
@@ -138,48 +163,50 @@ public class TestStepCommands {
 		}
 		// Select the option
 		Browser.ExecuteScript(javaScript);
-		// Handle the result
-		if ( (Browser.scriptResult != null) && (!Browser.scriptResult.equals("undefined")) ) {
-			// Complete Task
-			TestRunner.CompleteTask("pass");
-		}
-		else {
-			// Complete Task
-			TestRunner.CompleteTask("fail");
-		}
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void submit(String selector) {
 		// Submit the form
 		Browser.ExecuteScript(selector + ".submit()");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void submitAndWait(String selector) {
 		// Submit the form
 		Browser.ExecuteScript(selector + ".submit()");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail");
+		}
 		// Note: After the WebView's state becomes "SUCCEEDED", TestRunner.CompleteTask() is called.
 	}
 
 	public static void type(String selector, String value) {
 		// Type value in the target element
 		Browser.ExecuteScript(selector + ".value='" + value + "'");
-		// Complete Task
-		TestRunner.CompleteTask("pass");
+		// Handle Result of script
+		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
 	public static void verifyChecked(String selector) {
 		// Get the element's checked value
 		Browser.ExecuteScript(selector + ".checked");
-		// Handle result
-		if (Browser.scriptResult.equals("true")) {
-			// Complete Task
-			TestRunner.CompleteTask("pass");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
-			// Complete Task
-			TestRunner.CompleteTask("fail");
+			if (Browser.scriptResult.equals("true")) {
+				// Complete Task
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				// Complete Task
+				TestRunner.CompleteTask("fail");
+			}
 		}
 	}
 
@@ -206,50 +233,73 @@ public class TestStepCommands {
 	public static void verifyNotChecked(String selector) {
 		// Get the element's checked value
 		Browser.ExecuteScript(selector + ".checked");
-		// Handle result
-		if (Browser.scriptResult.equals("false")) {
-			// Complete Task
-			TestRunner.CompleteTask("pass");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
-			// Complete Task
-			TestRunner.CompleteTask("fail");
+			if (Browser.scriptResult.equals("false")) {
+				// Complete Task
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				// Complete Task
+				TestRunner.CompleteTask("fail");
+			}
 		}
 	}
 
 	public static void verifyText(String selector, String value) {
 		// Get the element's text
 		Browser.ExecuteScript(selector + ".textContent");
-		// Pass/fail test accordingly
-		if (Browser.scriptResult.equals(value)) {
-			TestRunner.CompleteTask("pass");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
-			TestRunner.CompleteTask("fail");
+			// Pass/fail test accordingly
+			if (Browser.scriptResult.equals(value)) {
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				TestRunner.CompleteTask("fail");
+			}
 		}
 	}
 
 	public static void verifyTitle(String target) {
 		// Get the current title
 		Browser.ExecuteScript("document.title");
-		// Pass/fail test accordingly
-		if (Browser.scriptResult.equals(target)) {
-			TestRunner.CompleteTask("pass");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
-			TestRunner.CompleteTask("fail");
+			// Pass/fail test accordingly
+			if (Browser.scriptResult.equals(target)) {
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				TestRunner.CompleteTask("fail");
+			}
 		}
 	}
 
 	public static void verifyLocation(String target) {
 		// Get the current location
 		Browser.ExecuteScript("document.location.href");
-		// Pass/fail test accordingly
-		if (Browser.scriptResult.equals(target)) {
-			TestRunner.CompleteTask("pass");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
-			TestRunner.CompleteTask("fail");
+			// Pass/fail test accordingly
+			if (Browser.scriptResult.equals(target)) {
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				TestRunner.CompleteTask("fail");
+			}
 		}
 	}
 

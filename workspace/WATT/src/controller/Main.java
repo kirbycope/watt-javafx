@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.TestStep;
 import watt.TestCase;
 import watt.TestRunner;
 import watt.UiHelpers;
@@ -78,10 +79,10 @@ public class Main {
 		// Get the "Value"
 		TextField value = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-value");
 		// Add step to test steps pane
-		AddStep(description.getText(), command.getValue(), target.getText(), value.getText());
+		AddStep(true, description.getText(), command.getValue(), target.getText(), value.getText(), false);
 	}
 
-	public static void AddStep(String description, Object command, String target, String value) {
+	public static void AddStep(boolean executeStep, String description, Object command, String target, String value, boolean continueOnFailure) {
 
 		// Create a new Test Step Container
 		VBox testStep = new VBox();
@@ -92,7 +93,7 @@ public class Main {
 		firstRow.setAlignment(Pos.CENTER_LEFT);
 		// Create the "Execute Step" CheckBox
 		CheckBox cbExecuteStep = new CheckBox();
-		cbExecuteStep.setSelected(true);
+		cbExecuteStep.setSelected(executeStep);
 		cbExecuteStep.setTooltip(new Tooltip("Execute Step"));
 		// Create the "Description" TextField
 		TextField tfDescription = new TextField();
@@ -173,12 +174,22 @@ public class Main {
 		Label lContinueOnFailure = new Label("Continue on Failure: ");
 		// Create the "Continue on Failure" CheckBox
 		CheckBox cbContinueOnFailure = new CheckBox();
+		cbContinueOnFailure.setSelected(continueOnFailure);
 		// <Pane HBox.hgrow="ALWAYS" />
 		Pane fillerPane = new Pane();
 		HBox.setHgrow(fillerPane, Priority.ALWAYS);
 		// Create the "Duplicate Step" label
 		Label lDuplicateStep = new Label("Duplicate Step");
 		lDuplicateStep.getStyleClass().add("duplicate-test-step");
+		// Set on click action
+		lDuplicateStep.setOnMouseClicked(
+			new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent mouseEvent) {
+					DuplicateStep(mouseEvent);
+				}
+			}
+		);
 		// Add elements to fifth row
 		fifthRow.getChildren().addAll(lContinueOnFailure, cbContinueOnFailure, fillerPane, lDuplicateStep);
 
@@ -304,6 +315,14 @@ public class Main {
 				}
 			}
 		}
+	}
+
+	public static void DuplicateStep(MouseEvent mouseEvent) {
+		Label source = (Label) mouseEvent.getSource();
+		HBox parent = (HBox) source.getParent();
+		VBox grandParent = (VBox) parent.getParent();
+		TestStep testStep = UiHelpers.GetTestStepDetails(grandParent);
+		Main.AddStep(testStep.ExecuteStep, testStep.Description, testStep.Command, testStep.Target, testStep.Value, testStep.ContinueOnFailure);
 	}
 
 	public static void ExpandCollapse(MouseEvent mouseEvent) {

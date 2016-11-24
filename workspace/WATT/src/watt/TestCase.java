@@ -107,7 +107,7 @@ public class TestCase {
 						else if (i==5) { value = ((Element) childNode).text(); }
 					}
 					// Finally Add the test step to the Test Steps Pane
-					Main.AddStep(description, command, target, value);
+					Main.AddStep(true, description, command, target, value, false);
 				}
 			}
 			catch (IOException e)

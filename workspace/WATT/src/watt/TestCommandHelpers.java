@@ -9,6 +9,11 @@ import javafx.application.Platform;
 
 public class TestCommandHelpers {
 
+	public static void DeleteAllVisibleCookies() {
+		// Source: http://stackoverflow.com/a/27374365/6933359
+		Browser.ExecuteScript("document.cookie.split(';').forEach(function(c) { document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/'); });");
+	}
+
 	public static boolean IsElementPresent(String selector) {
 		// Locate the element
 		Browser.ExecuteScript(selector);
@@ -18,6 +23,22 @@ public class TestCommandHelpers {
 		}
 		else {
 			return false;
+		}
+	}
+
+	public static void PassFailTestBasedOnScriptResult() {
+		// Handle JavaSript result
+		if (Browser.scriptResult != null) {
+			if (Browser.scriptResult.toString().equals("undefined")) {
+				// Complete Task
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				TestRunner.CompleteTask("fail"); // is unexpected value
+			}
+		}
+		else {
+			TestRunner.CompleteTask("fail"); // isNull
 		}
 	}
 

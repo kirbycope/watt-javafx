@@ -56,6 +56,11 @@
 	-fx-background-color: #f3f3f3;
 }
 
+.test-step-container-current {
+	-fx-background-color: #d9edf7;
+	/* -fx-border-color: #bce8f1; */
+}
+
 .test-step-container-expanded {
 	-fx-background-color: #dddddd;
 	-fx-padding: 0 0 5px 0;
@@ -70,6 +75,11 @@
 .test-step-container-passed {
 	-fx-background-color: #dff0d8;
 	/* -fx-border-color: #d6e9c6; */
+}
+
+.test-step-container-skipped {
+	-fx-background-color: #fcf8e3;
+	/* -fx-border-color: #faebcc; */
 }
 
 .duplicate-test-step {

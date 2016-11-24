@@ -66,17 +66,17 @@
 		   			<VBox id="menu-container"  managed="false" visible="false" styleClass="menu-container" StackPane.alignment="TOP_RIGHT">
 		   				<children>
 		   					<Label styleClass="menu-container-header" text="Commands" />
-		   					<Label styleClass="menu-container-item" text="Verify Location" />
-		   					<Label styleClass="menu-container-item" text="Verify Title" />
-		   					<Label styleClass="menu-container-header" text="Date" />
-		   					<Label styleClass="menu-container-item" text="Clear All Caches" />
-		   					<Label styleClass="menu-container-item" text="Clear Cookies" />
+		   					<Label onMouseClicked="#VerifyLocation" styleClass="menu-container-item" text="Verify Location" />
+		   					<Label onMouseClicked="#VerifyTitle" styleClass="menu-container-item" text="Verify Title" />
+		   					<Label styleClass="menu-container-header" text="Data" />
+		   					<!-- <Label styleClass="menu-container-item" text="Clear All Caches" />  -->
+		   					<Label onMouseClicked="#ClearCookies" styleClass="menu-container-item" text="Clear Cookies" />
 		   					<Label styleClass="menu-container-header" text="Resize" />
-		   					<Label styleClass="menu-container-item" text="Mobile" />
-		   					<Label styleClass="menu-container-item" text="Mobile-Wide" />
-		   					<Label styleClass="menu-container-item" text="Tablet" />
-		   					<Label styleClass="menu-container-item" text="Desktop" />
-		   					<Label styleClass="menu-container-item" text="Desktop-Wide" />
+		   					<Label onMouseClicked="#Mobile" styleClass="menu-container-item" text="Mobile" />
+		   					<Label onMouseClicked="#MobileWide" styleClass="menu-container-item" text="Mobile-Wide" />
+		   					<Label onMouseClicked="#Tablet" styleClass="menu-container-item" text="Tablet" />
+		   					<Label onMouseClicked="#Desktop" styleClass="menu-container-item" text="Desktop" />
+		   					<Label onMouseClicked="#DesktopWide" styleClass="menu-container-item" text="Desktop-Wide" />
 		   				</children>
 		   			</VBox>
 		   </children>
