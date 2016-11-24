@@ -39,12 +39,15 @@ import watt.Watt;
 public class Main {
 
 	private void AddBrowserEventListeners() {
-		// Set the On-Close action
-		Watt.browserStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent windowEvent) {
-	        	  Watt.browserStage = null;
-	          }
-		});
+		if (Watt.browserStage != null) {
+			// Set the On-Close action
+			Watt.browserStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent windowEvent) {
+		        	  Watt.browserStage = null;
+		        	  Watt.webEngine = null;
+		          }
+			});
+		}
 		// Add a Listener to the WebEngine
 		Watt.webEngine.getLoadWorker().stateProperty().addListener(
 			// Listen for a "State" change
@@ -55,10 +58,13 @@ public class Main {
 					// If the "State" has changed to "SUCCEEDED"
 					if (newState == State.SUCCEEDED)
                     {
-						// Get the address bar
-						TextField addressBar = (TextField) Watt.browserStage.getScene().lookup("#addressBar");
-						// Update the address bar
-						addressBar.setText(Watt.webEngine.getLocation());
+						// Update the UI if the Browser stage is open
+						if (Watt.browserStage != null){
+							// Get the Base Address test field from the UI
+							TextField baseUrl = (TextField) Watt.browserStage.getScene().lookup("#addressBar");
+							// Set the Base Address text
+							baseUrl.setText(Watt.webEngine.getLocation());
+						}
 						// Complete any currently executing test step
 						if (Watt.playing) {
 							TestRunner.CompleteTask("pass");
@@ -452,21 +458,26 @@ public class Main {
 	}
 
 	public void Play() {
-		if (Watt.browserStage != null) {
-			if (Watt.testStepsContainer.getChildren().size() > 0) {
-				// Get the Stop button
-				Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
-				// Enable the Stop button
-				stopLabel.setDisable(false);
-				// Get the Play label
-				Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
-				// Stop recording
-				if (Watt.recording) { Record(); }
-				// Disable recording
-				Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
-				recordingLabel.setDisable(true);
-				// Disable the Play button
-				playLabel.setDisable(true);
+		if (Watt.testStepsContainer.getChildren().size() > 0) {
+			if (Watt.browserStage != null) {
+				// Set UI to recording state
+				UiHelpers.SetRecordingState();
+				// Set Playing flag
+				Watt.playing = true;
+				// Set/Reset queueIndex for the Test Runner
+				TestRunner.queueIndex = 0;
+				// Start the Test Runner
+				TestRunner.NextTask();
+			}
+			else {
+				// Make a new Web View
+				WebView webView = new WebView();
+				// Get the Web Engine
+				Watt.webEngine = webView.getEngine();
+				// Add an event listener(s)
+				AddBrowserEventListeners();
+				// Set UI to recording state
+				UiHelpers.SetRecordingState();
 				// Set Playing flag
 				Watt.playing = true;
 				// Set/Reset queueIndex for the Test Runner
@@ -476,8 +487,7 @@ public class Main {
 			}
 		}
 		else {
-			UiHelpers.ShowToast("Browser not open!");
-			// TODO: Handle the browser window not being open
+			UiHelpers.ShowToast("No Test Steps to Play");
 		}
 	}
 

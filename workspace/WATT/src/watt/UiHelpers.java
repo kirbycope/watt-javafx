@@ -121,6 +121,25 @@ public class UiHelpers {
 		return styleClasses;
 	}
 
+	public static void SetRecordingState() {
+		// Get the Stop button
+		Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
+		// Enable the Stop button
+		stopLabel.setDisable(false);
+		// Get the Play label
+		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
+		// Stop recording
+		if (Watt.recording) {
+			// Toggle recording button state (also changes the recording flag)
+			ToggleRecordButton();
+		}
+		// Disable recording
+		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
+		recordingLabel.setDisable(true);
+		// Disable the Play button
+		playLabel.setDisable(true);
+	}
+
 	public static void ShowToast(String text) {
 		// Get the toaster
 		HBox toaster = (HBox) Watt.primaryStage.getScene().lookup("#toaster");
@@ -146,6 +165,7 @@ public class UiHelpers {
 		// Start the Task
 		new Thread(task).start();
 	}
+
 
 	public static void StopButtonEnabled(boolean value) {
 		// Get the Stop button
@@ -201,7 +221,6 @@ public class UiHelpers {
 			recordingLabel.getTooltip().setText("Stop Recording");
 		}
 	}
-
 
 	public static void StyleCurrentTestStep() {
 		// Get the current Test Step container

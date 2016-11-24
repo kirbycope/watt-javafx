@@ -54,7 +54,10 @@ public class TestRunner {
 		UiHelpers.StopButtonEnabled(false);
 		// Enable the Clear-Results button
 		UiHelpers.ClearResultsButtonEnabled(true);
-
+		// Dispose of the WebView if Browser stage is closed
+		if (Watt.browserStage == null) {
+			Watt.webEngine = null;
+		}
 
 		System.out.println("[TestRunner.java:48] Test Complete!");
 	}
@@ -86,7 +89,7 @@ public class TestRunner {
 			else {
 				CompleteTask("skip");
 			}
-			
+
 		}
 	}
 

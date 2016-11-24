@@ -17,11 +17,10 @@ import controller.Main;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import model.TestStep;
 
 public class TestCase {
 
@@ -70,8 +69,9 @@ public class TestCase {
 			    String content = contentBuilder.toString();
 			    // Get the Base Address
 				String baseAddress = content.substring( content.indexOf("<link")+32, content.lastIndexOf(" />")-1 );
-				// Set the Base Address in the UI
-				TextField baseUrl = (TextField) Watt.primaryStage.getScene().lookup("#base-url");
+				// Get the Base Address test field from the UI
+				TextField baseUrl = UiHelpers.GetBaseUrlField();
+				// Set the Base Address text
 				baseUrl.setText(baseAddress);
 				// Get the table of test steps
 				Document doc = Jsoup.parse(content);
@@ -82,10 +82,12 @@ public class TestCase {
 				rows.remove(0);
 				for (Element row : rows)
 				{
+					boolean execute;
 					String description = "";
 					String command = "";
 					String target = "";
 					String value = "";
+					boolean continueOnFailure;
 					// Get the previous node/element; the one before this table row (Looking for a HTML comment)
 					Node previousSiblingNode = row.previousSibling();
 					// Assure that the previous node...
@@ -98,6 +100,11 @@ public class TestCase {
 						description = ((Comment)previousSiblingNode).getData();
 					}
 					// Handle the <tr>
+					String dataContinueOnFailure = row.attr("data-continueOnFailure");
+					continueOnFailure = Boolean.parseBoolean(dataContinueOnFailure);
+					String dataExecute = row.attr("data-execute");
+					execute = Boolean.parseBoolean(dataExecute);
+					// Handle each <td> in the <tr>
 					for (int i = 0; i < row.childNodes().size(); i++)
 					{
 						Node childNode = row.childNodes().get(i);
@@ -107,7 +114,7 @@ public class TestCase {
 						else if (i==5) { value = ((Element) childNode).text(); }
 					}
 					// Finally Add the test step to the Test Steps Pane
-					Main.AddStep(true, description, command, target, value, false);
+					Main.AddStep(execute, description, command, target, value, continueOnFailure);
 				}
 			}
 			catch (IOException e)
@@ -187,31 +194,23 @@ public class TestCase {
 		// For each test step in the Test Steps container...
 		for (int i = 0; i < stepCount; i++)
 		{
-			// Get the children of the Test Step Container
-			ObservableList<javafx.scene.Node> testStepChildren = ((VBox) testSteps.get(i)).getChildren();
-			// Get the Description
-			HBox firstRow = (HBox) testStepChildren.get(0);
-			String description = ((TextField) firstRow.getChildren().get(1)).getText();
-			sb.append("	<!--" + description + "-->");
+			// Get the Test Step container
+			VBox testStepContainer = (VBox) testSteps.get(i);
+			TestStep testStep = UiHelpers.GetTestStepDetails(testStepContainer);
+			// Add the Description
+			sb.append("	<!--" + testStep.Description + "-->");
 			sb.append(newLine);
-			// Start a table row
-			sb.append("<tr>");
+			// Add the table row // <tr data-continueOnFailure="true" data-execute="true">
+			sb.append("<tr data-continueOnFailure=\""+ testStep.ContinueOnFailure + "\" data-execute=\"" + testStep.ExecuteStep + "\">");
 			sb.append(newLine);
-			// Get the Command
-			HBox secondRow = (HBox) testStepChildren.get(1);
-			@SuppressWarnings("rawtypes")
-			String command = (String) ((ComboBox) secondRow.getChildren().get(0)).getValue();
-			sb.append("	<td>" + command + "</td>");
+			// Add the Command
+			sb.append("	<td>" + testStep.Command + "</td>");
 			sb.append(newLine);
-			// Get the Target
-			HBox thirdRow = (HBox) testStepChildren.get(2);
-			String target = ((TextField) thirdRow.getChildren().get(0)).getText();
-			sb.append("	<td>" + target + "</td>");
+			// Add the Target
+			sb.append("	<td>" + testStep.Target + "</td>");
 			sb.append(newLine);
 			// Get the Value
-			HBox fourthRow = (HBox) testStepChildren.get(3);
-			String value = ((TextField) fourthRow.getChildren().get(0)).getText();
-			sb.append("	<td>" + value + "</td>");
+			sb.append("	<td>" + testStep.Value + "</td>");
 			sb.append(newLine);
 			// End the table row
 			sb.append("</tr>");
