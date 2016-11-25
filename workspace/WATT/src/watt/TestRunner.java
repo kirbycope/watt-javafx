@@ -21,8 +21,14 @@ public class TestRunner {
 			CompleteTest();
 		}
 		else {
-			// If the test step did not pass...
-			if (result.equals("pass") == false) {
+			// If the Test Step was skipped
+			if (result.equals("skip")) {
+				// Execute the next task
+				NextTask();
+			}
+			// If the Test Step failed
+			if (result.equals("fail")) {
+				// If the Continue on Failure flag is set to true
 				if (continueOnFailure) {
 					// Execute the next task
 					NextTask();
@@ -62,6 +68,13 @@ public class TestRunner {
 		System.out.println("[TestRunner.java:48] Test Complete!");
 	}
 
+	private static TestStep GetCurrentTestStepDetails() {
+		// Get the current Test Step container
+		VBox testStepContainer = UiHelpers.GetCurrentTestStepContiner();
+		// Return the new Test Step object
+		return UiHelpers.GetTestStepDetails(testStepContainer);
+	}
+
 	public static void NextTask() {
 		if (Watt.playing) {
 			// Reset the scriptResult flag
@@ -84,19 +97,15 @@ public class TestRunner {
 				try {
 					method.invoke(testStep);
 				}
-				catch (Exception e) { e.printStackTrace(); }
+				catch (Exception e) {
+					// Fail Test Step
+					CompleteTask("fail");
+				}
 			}
 			else {
 				CompleteTask("skip");
 			}
 
 		}
-	}
-
-	private static TestStep GetCurrentTestStepDetails() {
-		// Get the current Test Step container
-		VBox testStepContainer = UiHelpers.GetCurrentTestStepContiner();
-		// Return the new Test Step object
-		return UiHelpers.GetTestStepDetails(testStepContainer);
 	}
 }

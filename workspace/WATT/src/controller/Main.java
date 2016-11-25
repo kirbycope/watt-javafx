@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+
 import com.sun.javafx.stage.StageHelper;
 
 import javafx.beans.value.ChangeListener;
@@ -30,6 +32,8 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.TestStep;
+import netscape.javascript.JSObject;
+import watt.Callback;
 import watt.TestCase;
 import watt.TestRunner;
 import watt.UiHelpers;
@@ -38,6 +42,8 @@ import watt.Watt;
 @SuppressWarnings({"rawtypes", "unchecked", "restriction"})
 public class Main {
 
+	public static JSObject window;
+
 	private void AddBrowserEventListeners() {
 		if (Watt.browserStage != null) {
 			// Set the On-Close action
@@ -45,6 +51,12 @@ public class Main {
 		          public void handle(WindowEvent windowEvent) {
 		        	  Watt.browserStage = null;
 		        	  Watt.webEngine = null;
+		        	  // Set Recording flag
+		        	  Watt.recording = false;
+		        	  // Change recording button style
+		        	  UiHelpers.SetRecordButtonStyle(Watt.recording);
+		        	  // Stop recording
+		        	  StopRecordingScripts();
 		          }
 			});
 		}
@@ -58,17 +70,27 @@ public class Main {
 					// If the "State" has changed to "SUCCEEDED"
 					if (newState == State.SUCCEEDED)
                     {
-						// Update the UI if the Browser stage is open
-						if (Watt.browserStage != null){
+						// Update the Browser window
+						if (Watt.browserStage != null) {
 							// Get the Base Address test field from the UI
 							TextField baseUrl = (TextField) Watt.browserStage.getScene().lookup("#addressBar");
 							// Set the Base Address text
 							baseUrl.setText(Watt.webEngine.getLocation());
+							// Get the "window" variable of the Browser's DOM
+							Browser.ExecuteScript("window");
+							// Save the JavaScript "window" object
+							window = (JSObject) Browser.scriptResult;
+							// Map "app" in JS to a class in Java
+	    					window.setMember("app", new Callback());
 						}
 						// Complete any currently executing test step
 						if (Watt.playing) {
 							TestRunner.CompleteTask("pass");
 						};
+						// If recording, then add the Recording script(s)
+						if (Watt.recording) {
+							InjectRecordingScripts();
+						}
                     }
 				}
             }
@@ -406,6 +428,30 @@ public class Main {
 		}
 	}
 
+	public static void InjectCss(String style) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
+		org.w3c.dom.Node addStyle = doc.createElement("style");
+		addStyle.setTextContent(style);
+		org.w3c.dom.Element element = doc.getDocumentElement();
+        element.appendChild(addStyle);
+	}
+
+	public static void InjectJs(String script) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
+		org.w3c.dom.Node scriptElement = doc.createElement("script");
+		scriptElement.setTextContent(script);
+		org.w3c.dom.Element element = doc.getDocumentElement();
+        element.appendChild(scriptElement);
+	}
+
+	public static void InjectRecordingScripts() {
+		// HightlightMouseoverElement
+		String style = SourceFileToString("/assets/css/HightlightMouseoverElement.css");
+		InjectCss(style);
+		String script = SourceFileToString("/assets/js/HightlightMouseoverElement.js");
+		InjectJs(script);
+		// Turn on the Element Highlighter
+		Browser.ExecuteScript("document.addEventListener('mousemove', handler, true);");
+	}
+
 	public void NewTestCase() {
 		TestCase.New();
 	}
@@ -459,32 +505,30 @@ public class Main {
 
 	public void Play() {
 		if (Watt.testStepsContainer.getChildren().size() > 0) {
-			if (Watt.browserStage != null) {
-				// Set UI to recording state
-				UiHelpers.SetRecordingState();
-				// Set Playing flag
-				Watt.playing = true;
-				// Set/Reset queueIndex for the Test Runner
-				TestRunner.queueIndex = 0;
-				// Start the Test Runner
-				TestRunner.NextTask();
-			}
-			else {
+			if (Watt.browserStage == null) {
 				// Make a new Web View
 				WebView webView = new WebView();
-				// Get the Web Engine
+				// Set the Web Engine
 				Watt.webEngine = webView.getEngine();
-				// Add an event listener(s)
-				AddBrowserEventListeners();
-				// Set UI to recording state
-				UiHelpers.SetRecordingState();
-				// Set Playing flag
-				Watt.playing = true;
-				// Set/Reset queueIndex for the Test Runner
-				TestRunner.queueIndex = 0;
-				// Start the Test Runner
-				TestRunner.NextTask();
 			}
+			// Add an event listener(s)
+			AddBrowserEventListeners();
+			// Stop Recording
+			StopRecordingScripts();
+			// Disable Record button
+			UiHelpers.RecordButtonEnabled(false);
+			// Disable Play button
+			UiHelpers.PlayButtonEnabled(false);
+			// Disable the Add Step button
+			UiHelpers.AddStepButtonEnabled(false);
+			// Enable Stop button
+			UiHelpers.StopButtonEnabled(true);
+			// Set Playing flag
+			Watt.playing = true;
+			// Set/Reset queueIndex for the Test Runner
+			TestRunner.queueIndex = 0;
+			// Start the Test Runner
+			TestRunner.NextTask();
 		}
 		else {
 			UiHelpers.ShowToast("No Test Steps to Play");
@@ -492,9 +536,27 @@ public class Main {
 	}
 
 	public void Record() {
-		// Toggle recording button state (also changes the recording flag)
-		UiHelpers.ToggleRecordButton();
-		// TODO
+		if (Watt.browserStage != null) {
+			if (Watt.recording) {
+				// Set Recording flag
+				Watt.recording = false;
+				// Change recording button style
+				UiHelpers.SetRecordButtonStyle(Watt.recording);
+				// Stop recording
+				StopRecordingScripts();
+			}
+			else {
+				// Set Recording flag
+				Watt.recording = true;
+				// Change recording button style
+				UiHelpers.SetRecordButtonStyle(Watt.recording);
+				// Start recording
+				InjectRecordingScripts();
+			}
+		}
+		else {
+			UiHelpers.ShowToast("Browser not open!");
+		}
 	}
 
 	public void RemoveAll() {
@@ -520,6 +582,24 @@ public class Main {
 		TestCase.Save();
 	}
 
+	public static String SourceFileToString(String fileName) {
+		StringBuilder builder = new StringBuilder();
+		InputStream is = Watt.class.getResourceAsStream(fileName);
+		int ch;
+		try
+		{
+			while((ch = is.read()) != -1)
+			{
+			    builder.append((char)ch);
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return builder.toString();
+	}
+
 	public void Stop() {
 		// Enable the Add Step button
 		UiHelpers.AddStepButtonEnabled(true);
@@ -531,5 +611,10 @@ public class Main {
 		UiHelpers.StopButtonEnabled(false);
 		// Stop Playing
 		Watt.playing = false;
+	}
+
+	public static void StopRecordingScripts() {
+		// Turn off the Element Highlighter
+		Browser.ExecuteScript("document.removeEventListener('mousemove', handler, true);");
 	}
 }

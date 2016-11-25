@@ -10,18 +10,6 @@ public class Browser {
 
 	public static Object scriptResult;
 
-	public static void ExecuteScript(String script) {
-		// Reset the script result variable
-		scriptResult = null;
-		System.out.println("[Browser.java:15] Script |:| " + script);
-		try {
-			scriptResult = Watt.webEngine.executeScript(script);
-		} catch (Exception e) {
-			// do nothing
-		}
-		System.out.println("[Browser.java:21] Result |:| " + scriptResult);
-	}
-
 	public void Back() {
 		ExecuteScript("history.back()");
 		if (Watt.recording) {
@@ -48,6 +36,18 @@ public class Browser {
 		Menu();
 		// Resize the viewport to 1280px wide
 		Watt.browserStage.setWidth(1280);
+	}
+
+	public static void ExecuteScript(String script) {
+		// Reset the script result variable
+		scriptResult = null;
+		System.out.println("[Browser.java:15] Script |:| " + script);
+		try {
+			scriptResult = Watt.webEngine.executeScript(script);
+		} catch (Exception e) {
+			// do nothing
+		}
+		System.out.println("[Browser.java:21] Result |:| " + scriptResult);
 	}
 
 	public void Forward() {

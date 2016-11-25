@@ -25,7 +25,7 @@ public class Watt extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		// Load Icon
-		applicationIcon = new Image(Watt.class.getResourceAsStream("../assets/icon.png"));
+		applicationIcon = new Image(Watt.class.getResourceAsStream("../assets/img/icon.png"));
 		// Set the main stage
 		initMainLayout(primaryStage);
 	}

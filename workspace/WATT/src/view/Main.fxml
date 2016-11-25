@@ -16,7 +16,7 @@
 <?import com.sun.javafx.scene.control.skin.InputField?>
 <?import javafx.scene.layout.StackPane?>
 
-<VBox styleClass="app-wrapper" stylesheets="/assets/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Main">
+<VBox styleClass="app-wrapper" stylesheets="/assets/css/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Main">
 	<children>
 		<HBox alignment="CENTER_LEFT" styleClass="app-toolbar-wrapper">
 			<children>

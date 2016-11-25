@@ -121,25 +121,6 @@ public class UiHelpers {
 		return styleClasses;
 	}
 
-	public static void SetRecordingState() {
-		// Get the Stop button
-		Label stopLabel = (Label) Watt.primaryStage.getScene().lookup("#stop");
-		// Enable the Stop button
-		stopLabel.setDisable(false);
-		// Get the Play label
-		Label playLabel = (Label) Watt.primaryStage.getScene().lookup("#play");
-		// Stop recording
-		if (Watt.recording) {
-			// Toggle recording button state (also changes the recording flag)
-			ToggleRecordButton();
-		}
-		// Disable recording
-		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
-		recordingLabel.setDisable(true);
-		// Disable the Play button
-		playLabel.setDisable(true);
-	}
-
 	public static void ShowToast(String text) {
 		// Get the toaster
 		HBox toaster = (HBox) Watt.primaryStage.getScene().lookup("#toaster");
@@ -165,7 +146,6 @@ public class UiHelpers {
 		// Start the Task
 		new Thread(task).start();
 	}
-
 
 	public static void StopButtonEnabled(boolean value) {
 		// Get the Stop button
@@ -196,29 +176,24 @@ public class UiHelpers {
 		}
 	}
 
-	public static void ToggleRecordButton() {
+	public static void SetRecordButtonStyle(boolean recording) {
 		// Get the recording label
 		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");
 		// Get the styleClass of the Recording label
 		ObservableList<String> styleClasses = recordingLabel.getStyleClass();
-		// Handle the current state
-		if (Watt.recording) {
-			// Stop Recording
-			Watt.recording = false;
-			// Update the styleClass of the recording label
-			styleClasses.remove("test-step-header-button-recording");
-			styleClasses.add("test-step-header-button");
-			// Update the Tooltip
-			recordingLabel.getTooltip().setText("Record");
-		}
-		else {
-			// Start Recording
-			Watt.recording = true;
+		if (recording) {
 			// Update the styleClass of the recording label
 			styleClasses.remove("test-step-header-button");
 			styleClasses.add("test-step-header-button-recording");
 			// Update the Tooltip
 			recordingLabel.getTooltip().setText("Stop Recording");
+		}
+		else {
+			// Update the styleClass of the recording label
+			styleClasses.remove("test-step-header-button-recording");
+			styleClasses.add("test-step-header-button");
+			// Update the Tooltip
+			recordingLabel.getTooltip().setText("Record");
 		}
 	}
 
