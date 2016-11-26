@@ -443,13 +443,16 @@ public class Main {
 	}
 
 	public static void InjectRecordingScripts() {
-		// HightlightMouseoverElement
-		String style = SourceFileToString("/assets/css/HightlightMouseoverElement.css");
-		InjectCss(style);
-		String script = SourceFileToString("/assets/js/HightlightMouseoverElement.js");
-		InjectJs(script);
+		// Inject style HightlightMouseoverElement.css
+		InjectCss( SourceFileToString("/assets/css/HightlightMouseoverElement.css") );
+		// Inject script HightlightMouseoverElement.js
+		InjectJs( SourceFileToString("/assets/js/HightlightMouseoverElement.js") );
 		// Turn on the Element Highlighter
-		Browser.ExecuteScript("document.addEventListener('mousemove', handler, true);");
+		Browser.ExecuteScript("document.addEventListener('mousemove', hoverHandler, true);");
+		// Inject script OnClick.js
+		InjectJs( SourceFileToString("/assets/js/OnClick.js") );
+		// Turn on the OnClick
+		Browser.ExecuteScript("document.addEventListener('click', clickHandler, true);");
 	}
 
 	public void NewTestCase() {
