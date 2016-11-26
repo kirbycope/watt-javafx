@@ -21,6 +21,11 @@ public class TestRunner {
 			CompleteTest();
 		}
 		else {
+			// If the Test Step was stopped
+			if (result.equals("stop")) {
+				// Complete test
+				CompleteTest();
+			}
 			// If the Test Step was skipped
 			if (result.equals("skip")) {
 				// Execute the next task

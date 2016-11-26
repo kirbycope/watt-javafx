@@ -31,6 +31,26 @@ public class UiHelpers {
 		btnAddStep.setDisable(!value);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void ClearTestStepBuilder() {
+		// Get the "Description"
+		TextField description = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-description");
+		// Clear the "Description"
+		description.clear();
+		// Get the "Command"
+		ComboBox command = (ComboBox) Watt.primaryStage.getScene().lookup("#test-step-builder-command");
+		// Clear the "Command"
+		command.setValue(null);
+		// Get the "Target"
+		TextField target = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-target");
+		// Clear the "Description"
+		target.clear();
+		// Get the "Value"
+		TextField value = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-value");
+		// Clear the "Description"
+		value.clear();
+	}
+
 	public static TextField GetBaseUrlField() {
 		return (TextField) Watt.primaryStage.getScene().lookup("#base-url");
 	}
@@ -167,7 +187,7 @@ public class UiHelpers {
 			// Update the styleClass of the firstRow
 			styleClasses.add("test-step-container-failed");
 		}
-		else if (result.equals("skip")){
+		else if ( (result.equals("skip")) || (result.equals("stop")) ) {
 			// Update the styleClass of the firstRow
 			styleClasses.add("test-step-container-skipped");
 		}

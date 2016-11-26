@@ -243,6 +243,9 @@ public class Main {
 		// Re-add Test Step Container to the ScrollPane
 		ScrollPane testStepsScrollPane = (ScrollPane) Watt.primaryStage.getScene().lookup("#test-step-scrollpane");
 		testStepsScrollPane.setContent(Watt.testStepsContainer);
+
+		// Clear form
+		UiHelpers.ClearTestStepBuilder();
 	}
 
 	private boolean BrowserIsOpen() {
@@ -258,22 +261,7 @@ public class Main {
 	}
 
 	public void ClearForm() {
-		// Get the "Description"
-		TextField description = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-description");
-		// Clear the "Description"
-		description.clear();
-		// Get the "Command"
-		ComboBox command = (ComboBox) Watt.primaryStage.getScene().lookup("#test-step-builder-command");
-		// Clear the "Command"
-		command.setValue(null);
-		// Get the "Target"
-		TextField target = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-target");
-		// Clear the "Description"
-		target.clear();
-		// Get the "Value"
-		TextField value = (TextField) Watt.primaryStage.getScene().lookup("#test-step-builder-value");
-		// Clear the "Description"
-		value.clear();
+		UiHelpers.ClearTestStepBuilder();
 	}
 
 	public void ClearResults() {
@@ -617,7 +605,11 @@ public class Main {
 	}
 
 	public static void StopRecordingScripts() {
-		// Turn off the Element Highlighter
-		Browser.ExecuteScript("document.removeEventListener('mousemove', handler, true);");
+		// Remove the hover handler
+		Browser.ExecuteScript("document.removeEventListener('mousemove', hoverHandler, true);");
+		// Remove the click handler
+		Browser.ExecuteScript("document.removeEventListener('click', clickHandler, true);");
+		// Remove highlighter style
+		Browser.ExecuteScript("if (prevElement!= null) {prevElement.classList.remove('mouseOn');}");
 	}
 }

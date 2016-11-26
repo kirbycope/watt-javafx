@@ -161,18 +161,19 @@ public class TestStep {
 		else if (target.startsWith("link=")) {
 			// Remove link=
 			target = target.substring(5);
-			// TODO
+			// Create the selector
+			selector = "document.evaluate('//*[text()=\"" + target + "\"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0)";
 		}
 		else if (target.startsWith("name=")) {
 			// Remove name=
 			target = target.substring(5);
 			// TODO: Check for combination of name, type, and value
-			// TODO
 		}
 		else if (target.startsWith("xpath=")) {
 			// Remove xpath=
 			target = target.substring(6);
-			// TODO
+			//
+			selector = "document.evaluate(\"" + target + "\", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0)";
 		}
 		return selector;
 	}

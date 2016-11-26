@@ -65,7 +65,7 @@ public class TestCommandHelpers {
 				// Check if Stop has been clicked
 				if (Watt.playing == false)
 				{
-					StopWaitForAndCompleteTask(exec, "fail"); // TODO: Mark as test execution Stop requested
+					StopWaitForAndCompleteTask(exec, "stop");
 				}
 				// Get the current time
 				LocalTime currentTime = LocalTime.now();

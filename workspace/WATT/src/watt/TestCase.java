@@ -119,8 +119,7 @@ public class TestCase {
 			}
 			catch (IOException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				UiHelpers.ShowToast("Error reading file!");
 			}
 		}
 	}
@@ -146,8 +145,7 @@ public class TestCase {
                 fileWriter.close();
             } catch (IOException e)
             {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+            	UiHelpers.ShowToast("Error saving file!");
 			}
 		}
 	}
