@@ -1,14 +1,76 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
+import netscape.javascript.JSObject;
 import watt.BaseUrl;
+import watt.Callback;
 import watt.TestCommandHelpers;
+import watt.TestRunner;
+import watt.UiHelpers;
 import watt.Watt;
 
 public class Browser {
 
 	public static Object scriptResult;
+	public static JSObject window;
+
+	public static void AddBrowserEventListeners() {
+		if (Watt.browserStage != null) {
+			// Set the On-Close action
+			Watt.browserStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent windowEvent) {
+		        	  Watt.browserStage = null;
+		        	  Watt.webEngine = null;
+		        	  // Set Recording flag
+		        	  Watt.recording = false;
+		        	  // Change recording button style
+		        	  UiHelpers.SetRecordButtonStyle(Watt.recording);
+		        	  // Stop recording
+		        	  StopRecordingScripts();
+		          }
+			});
+		}
+		// Add a Listener to the WebEngine
+		Watt.webEngine.getLoadWorker().stateProperty().addListener(
+			// Listen for a "State" change
+			new ChangeListener<State>() {
+				// Define the method to run
+				@SuppressWarnings("rawtypes")
+				public void changed(ObservableValue ov, State oldState, State newState) {
+					// If the "State" has changed to "SUCCEEDED"
+					if (newState == State.SUCCEEDED) {
+						// Update the Browser window
+						if (Watt.browserStage != null) {
+							// Get the Base Address test field from the UI
+							TextField baseUrl = (TextField) Watt.browserStage.getScene().lookup("#addressBar");
+							// Set the Base Address text
+							baseUrl.setText(Watt.webEngine.getLocation());
+							// Get the "window" variable of the Browser's DOM
+							Browser.ExecuteScript("window");
+							// Save the JavaScript "window" object
+							window = (JSObject) Browser.scriptResult;
+							// Map "app" in JS to a class in Java
+	    					window.setMember("app", new Callback());
+						}
+						// Complete any currently executing test step
+						if (Watt.playing) {
+							TestRunner.CompleteTask("pass");
+						};
+						// If recording, then add the Recording script(s)
+						if (Watt.recording) {
+							InjectRecordingScripts();
+						}
+                    }
+				}
+            }
+		);
+	}
 
 	public void Back() {
 		ExecuteScript("history.back()");
@@ -48,6 +110,39 @@ public class Browser {
 			// do nothing
 		}
 		System.out.println("[Browser.java:21] Result |:| " + scriptResult);
+	}
+
+	public static void InjectCss(String style) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
+	org.w3c.dom.Node addStyle = doc.createElement("style");
+	addStyle.setTextContent(style);
+	org.w3c.dom.Element element = doc.getDocumentElement();
+    element.appendChild(addStyle);
+}
+
+	public static void InjectJs(String script) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
+		org.w3c.dom.Node scriptElement = doc.createElement("script");
+		scriptElement.setTextContent(script);
+		org.w3c.dom.Element element = doc.getDocumentElement();
+	    element.appendChild(scriptElement);
+	}
+
+	public static void InjectRecordingScripts() {
+		// Inject style HightlightMouseoverElement.css
+		InjectCss( Watt.SourceFileToString("/assets/css/HightlightMouseoverElement.css") );
+		// Inject script HightlightMouseoverElement.js
+		InjectJs( Watt.SourceFileToString("/assets/js/HightlightMouseoverElement.js") );
+		// Turn on the Element Highlighter
+		Browser.ExecuteScript("document.addEventListener('mousemove', hoverHandler, true);");
+		// Inject script OnClick.js
+		InjectJs( Watt.SourceFileToString("/assets/js/OnClick.js") );
+		// Turn on the OnClick
+		Browser.ExecuteScript("document.addEventListener('click', clickHandler, true);");
+		// Inject style ContextMenu.css
+		InjectCss( Watt.SourceFileToString("/assets/css/ContextMenu.css") );
+		// Inject Script ContextMenu.js
+		InjectJs( Watt.SourceFileToString("/assets/js/ContextMenu.js") );
+		// Turn on the Context Menu
+		Browser.ExecuteScript("document.addEventListener('contextmenu', contextMenuHandler, true);");
 	}
 
 	public void Forward() {
@@ -103,6 +198,19 @@ public class Browser {
 		if (Watt.recording) {
 			Main.AddStep(true, "Reload", "refresh", null, null, false);
 		}
+	}
+
+	public static void StopRecordingScripts() {
+		// Remove hover highlighter style
+		Browser.ExecuteScript("if (prevElement!= null) {prevElement.classList.remove('mouseOn');}");
+		// Remove contextMenu style
+		Browser.ExecuteScript("document.getElementById('context-menu').style.visibility = 'hidden'");
+		// Remove hover highlighter handler
+		Browser.ExecuteScript("document.removeEventListener('mousemove', hoverHandler, true);");
+		// Remove click handler
+		Browser.ExecuteScript("document.removeEventListener('click', clickHandler, true);");
+		// Remove context menu handler
+		Browser.ExecuteScript("document.removeEventListener('contextmenu', contextMenuHandler, true);");
 	}
 
 	public void Tablet() {

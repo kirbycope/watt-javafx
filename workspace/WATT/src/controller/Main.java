@@ -1,14 +1,9 @@
 package controller;
 
 import java.io.IOException;
-import java.io.InputStream;
-
 import com.sun.javafx.stage.StageHelper;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker.State;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -30,10 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import model.TestStep;
-import netscape.javascript.JSObject;
-import watt.Callback;
 import watt.TestCase;
 import watt.TestRunner;
 import watt.UiHelpers;
@@ -41,61 +33,6 @@ import watt.Watt;
 
 @SuppressWarnings({"rawtypes", "unchecked", "restriction"})
 public class Main {
-
-	public static JSObject window;
-
-	private void AddBrowserEventListeners() {
-		if (Watt.browserStage != null) {
-			// Set the On-Close action
-			Watt.browserStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		          public void handle(WindowEvent windowEvent) {
-		        	  Watt.browserStage = null;
-		        	  Watt.webEngine = null;
-		        	  // Set Recording flag
-		        	  Watt.recording = false;
-		        	  // Change recording button style
-		        	  UiHelpers.SetRecordButtonStyle(Watt.recording);
-		        	  // Stop recording
-		        	  StopRecordingScripts();
-		          }
-			});
-		}
-		// Add a Listener to the WebEngine
-		Watt.webEngine.getLoadWorker().stateProperty().addListener(
-			// Listen for a "State" change
-			new ChangeListener<State>()
-            {
-				// Define the method to run
-				public void changed(ObservableValue ov, State oldState, State newState) {
-					// If the "State" has changed to "SUCCEEDED"
-					if (newState == State.SUCCEEDED)
-                    {
-						// Update the Browser window
-						if (Watt.browserStage != null) {
-							// Get the Base Address test field from the UI
-							TextField baseUrl = (TextField) Watt.browserStage.getScene().lookup("#addressBar");
-							// Set the Base Address text
-							baseUrl.setText(Watt.webEngine.getLocation());
-							// Get the "window" variable of the Browser's DOM
-							Browser.ExecuteScript("window");
-							// Save the JavaScript "window" object
-							window = (JSObject) Browser.scriptResult;
-							// Map "app" in JS to a class in Java
-	    					window.setMember("app", new Callback());
-						}
-						// Complete any currently executing test step
-						if (Watt.playing) {
-							TestRunner.CompleteTask("pass");
-						};
-						// If recording, then add the Recording script(s)
-						if (Watt.recording) {
-							InjectRecordingScripts();
-						}
-                    }
-				}
-            }
-		);
-	}
 
 	public void AddStep() {
 		// Get the "Description"
@@ -416,33 +353,6 @@ public class Main {
 		}
 	}
 
-	public static void InjectCss(String style) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
-		org.w3c.dom.Node addStyle = doc.createElement("style");
-		addStyle.setTextContent(style);
-		org.w3c.dom.Element element = doc.getDocumentElement();
-        element.appendChild(addStyle);
-	}
-
-	public static void InjectJs(String script) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
-		org.w3c.dom.Node scriptElement = doc.createElement("script");
-		scriptElement.setTextContent(script);
-		org.w3c.dom.Element element = doc.getDocumentElement();
-        element.appendChild(scriptElement);
-	}
-
-	public static void InjectRecordingScripts() {
-		// Inject style HightlightMouseoverElement.css
-		InjectCss( SourceFileToString("/assets/css/HightlightMouseoverElement.css") );
-		// Inject script HightlightMouseoverElement.js
-		InjectJs( SourceFileToString("/assets/js/HightlightMouseoverElement.js") );
-		// Turn on the Element Highlighter
-		Browser.ExecuteScript("document.addEventListener('mousemove', hoverHandler, true);");
-		// Inject script OnClick.js
-		InjectJs( SourceFileToString("/assets/js/OnClick.js") );
-		// Turn on the OnClick
-		Browser.ExecuteScript("document.addEventListener('click', clickHandler, true);");
-	}
-
 	public void NewTestCase() {
 		TestCase.New();
 	}
@@ -480,7 +390,7 @@ public class Main {
 		        // Get the Web Engine
 		        Watt.webEngine = webView.getEngine();
 		        // Add an event listener(s)
-		        AddBrowserEventListeners();
+		        Browser.AddBrowserEventListeners();
 		        // DEBUGGING: Load a site!
 		        Watt.webEngine.load("https://www.google.com/");
 	 		}
@@ -503,9 +413,9 @@ public class Main {
 				Watt.webEngine = webView.getEngine();
 			}
 			// Add an event listener(s)
-			AddBrowserEventListeners();
+			Browser.AddBrowserEventListeners();
 			// Stop Recording
-			StopRecordingScripts();
+			Browser.StopRecordingScripts();
 			// Disable Record button
 			UiHelpers.RecordButtonEnabled(false);
 			// Disable Play button
@@ -534,7 +444,7 @@ public class Main {
 				// Change recording button style
 				UiHelpers.SetRecordButtonStyle(Watt.recording);
 				// Stop recording
-				StopRecordingScripts();
+				Browser.StopRecordingScripts();
 			}
 			else {
 				// Set Recording flag
@@ -542,7 +452,7 @@ public class Main {
 				// Change recording button style
 				UiHelpers.SetRecordButtonStyle(Watt.recording);
 				// Start recording
-				InjectRecordingScripts();
+				Browser.InjectRecordingScripts();
 			}
 		}
 		else {
@@ -573,24 +483,6 @@ public class Main {
 		TestCase.Save();
 	}
 
-	public static String SourceFileToString(String fileName) {
-		StringBuilder builder = new StringBuilder();
-		InputStream is = Watt.class.getResourceAsStream(fileName);
-		int ch;
-		try
-		{
-			while((ch = is.read()) != -1)
-			{
-			    builder.append((char)ch);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return builder.toString();
-	}
-
 	public void Stop() {
 		// Enable the Add Step button
 		UiHelpers.AddStepButtonEnabled(true);
@@ -602,14 +494,5 @@ public class Main {
 		UiHelpers.StopButtonEnabled(false);
 		// Stop Playing
 		Watt.playing = false;
-	}
-
-	public static void StopRecordingScripts() {
-		// Remove the hover handler
-		Browser.ExecuteScript("document.removeEventListener('mousemove', hoverHandler, true);");
-		// Remove the click handler
-		Browser.ExecuteScript("document.removeEventListener('click', clickHandler, true);");
-		// Remove highlighter style
-		Browser.ExecuteScript("if (prevElement!= null) {prevElement.classList.remove('mouseOn');}");
 	}
 }

@@ -1,6 +1,8 @@
 package watt;
 
 import java.io.IOException;
+import java.io.InputStream;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -69,6 +71,24 @@ public class Watt extends Application {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String SourceFileToString(String fileName) {
+		StringBuilder builder = new StringBuilder();
+		InputStream is = Watt.class.getResourceAsStream(fileName);
+		int ch;
+		try
+		{
+			while((ch = is.read()) != -1)
+			{
+			    builder.append((char)ch);
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return builder.toString();
 	}
 
 	@SuppressWarnings("rawtypes")

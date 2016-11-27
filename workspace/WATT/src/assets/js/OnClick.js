@@ -1,16 +1,19 @@
 var target;
 var clickHandler =
 	function (e) {
-		if ( e.target.getAttribute('id') != null) {
-			target = 'id=' + e.target.getAttribute('id');
+		// Record click only if it did not originate in the context menu (ContextMenu.js)
+		if ( (e.target.className != 'ul') && (e.target.className != 'li') && (e.target.className != 'li-last') ) {
+			if ( e.target.getAttribute('id') != null) {
+				target = 'id=' + e.target.getAttribute('id');
+			}
+			else if (e.target.tagName.toLowerCase() == 'a') {
+				target = 'link=' + e.target.innerText;
+			}
+			else {
+				target = 'css=' + fullPath(e.target);
+			}
+			app.addTestStep(target);
 		}
-		else if (e.target.tagName.toLowerCase() == 'a') {
-			target = 'link=' + e.target.innerText;
-		}
-		else {
-			target = 'css=' + fullPath(e.target);
-		}
-		app.addTestStep(target);
 	}
 ;
 

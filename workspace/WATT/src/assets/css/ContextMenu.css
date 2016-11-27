@@ -1,0 +1,22 @@
+#context-menu {
+    background-color: #fff;
+    border: 1px solid black;
+    position: absolute;
+    visibility: hidden;
+}
+
+.ul {
+	list-style:none;
+	margin: 0px;
+	padding: .5em;
+}
+
+.li-last {
+    border-bottom: 1px solid;
+    padding-bottom: 2px;
+}
+
+.li:hover,
+.li-last:hover {
+	background-color: #d3d3d3;
+}
