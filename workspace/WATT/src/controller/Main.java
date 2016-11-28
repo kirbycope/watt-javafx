@@ -353,6 +353,30 @@ public class Main {
 		}
 	}
 
+	public void Highlight() {
+		if (Watt.browserStage != null) {
+			if (Watt.highlighting) {
+				// Set highlighting flag
+				Watt.highlighting = false;
+				// Change highlighting button style
+				UiHelpers.SetHighlightButtonStyle(Watt.highlighting);
+				// Stop highlighting script(s)
+				Browser.StopHighlightingScripts();
+			}
+			else {
+				// Set highlighting flag
+				Watt.highlighting = true;
+				// Change highlighting button style
+				UiHelpers.SetHighlightButtonStyle(Watt.highlighting);
+				// Start highlighting script(s)
+				Browser.InjectHighlightingScripts();
+			}
+		}
+		else {
+			UiHelpers.ShowToast("Browser not open!");
+		}
+	}
+
 	public void NewTestCase() {
 		TestCase.New();
 	}
@@ -414,8 +438,26 @@ public class Main {
 			}
 			// Add an event listener(s)
 			Browser.AddBrowserEventListeners();
+			// Stop Highlighting
+			if (Watt.highlighting) {
+				// Set Highlighting flag
+				Watt.highlighting = false;
+				// Change recording button style
+				UiHelpers.SetHighlightButtonStyle(Watt.highlighting);
+				// Stop recording
+				Browser.StopHighlightingScripts();
+			}
+			// Disable the Highlight button
+			UiHelpers.HighlightButtonEnabled(false);
 			// Stop Recording
-			Browser.StopRecordingScripts();
+			if (Watt.recording) {
+				// Set Recording flag
+				Watt.recording = false;
+				// Change recording button style
+				UiHelpers.SetRecordButtonStyle(Watt.recording);
+				// Stop recording
+				Browser.StopRecordingScripts();
+			}
 			// Disable Record button
 			UiHelpers.RecordButtonEnabled(false);
 			// Disable Play button
@@ -443,7 +485,7 @@ public class Main {
 				Watt.recording = false;
 				// Change recording button style
 				UiHelpers.SetRecordButtonStyle(Watt.recording);
-				// Stop recording
+				// Stop recording script(s)
 				Browser.StopRecordingScripts();
 			}
 			else {
@@ -451,7 +493,7 @@ public class Main {
 				Watt.recording = true;
 				// Change recording button style
 				UiHelpers.SetRecordButtonStyle(Watt.recording);
-				// Start recording
+				// Start recording script(s)
 				Browser.InjectRecordingScripts();
 			}
 		}

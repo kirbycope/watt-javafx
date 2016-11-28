@@ -111,8 +111,16 @@ public class TestStep {
 		TestStepCommands.verifyElementPresent(GetSelector());
 	}
 
+	public void verifyLocation() {
+		TestStepCommands.verifyLocation(this.Target);
+	}
+
 	public void verifyNotChecked() {
 		TestStepCommands.verifyNotChecked(GetSelector());
+	}
+
+	public void verifyTable() {
+		TestStepCommands.verifyTable(GetSelector(), this.Value);
 	}
 
 	public void verifyText() {
@@ -123,8 +131,8 @@ public class TestStep {
 		TestStepCommands.verifyTitle(this.Target);
 	}
 
-	public void verifyLocation() {
-		TestStepCommands.verifyLocation(this.Target);
+	public void verifyValue() {
+		TestStepCommands.verifyValue(GetSelector(), this.Value);
 	}
 
 	public void waitForLocation() {

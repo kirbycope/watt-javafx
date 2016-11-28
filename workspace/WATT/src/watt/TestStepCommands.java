@@ -230,6 +230,24 @@ public class TestStepCommands {
 		}
 	}
 
+	public static void verifyLocation(String target) {
+		// Get the current location
+		Browser.ExecuteScript("document.location.href");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
+		}
+		else {
+			// Pass/fail test accordingly
+			if (Browser.scriptResult.equals(target)) {
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				TestRunner.CompleteTask("fail");
+			}
+		}
+	}
+
 	public static void verifyNotChecked(String selector) {
 		// Get the element's checked value
 		Browser.ExecuteScript(selector + ".checked");
@@ -247,6 +265,10 @@ public class TestStepCommands {
 				TestRunner.CompleteTask("fail");
 			}
 		}
+	}
+
+	public static void verifyTable(String selector, String value) {
+		// TODO
 	}
 
 	public static void verifyText(String selector, String value) {
@@ -285,16 +307,16 @@ public class TestStepCommands {
 		}
 	}
 
-	public static void verifyLocation(String target) {
-		// Get the current location
-		Browser.ExecuteScript("document.location.href");
+	public static void verifyValue(String selector, String value) {
+		// Get the element's value
+		Browser.ExecuteScript(selector + ".value");
 		// Handle script result
 		if (Browser.scriptResult == null) {
 			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
 			// Pass/fail test accordingly
-			if (Browser.scriptResult.equals(target)) {
+			if (Browser.scriptResult.equals(value)) {
 				TestRunner.CompleteTask("pass");
 			}
 			else {

@@ -87,6 +87,13 @@ public class UiHelpers {
 		return new TestStep(executeStep, description, command, target, value, continueOnFailure);
 	}
 
+	public static void HighlightButtonEnabled(boolean value) {
+		// Get the Highlight button
+		Label highlightLabel = (Label) Watt.primaryStage.getScene().lookup("#highlight");
+		// Handle request
+		highlightLabel.setDisable(!value);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void LoadCommandOptions(ComboBox command) {
 		// Get all the methods of the TestStepCommands class
@@ -193,6 +200,27 @@ public class UiHelpers {
 		}
 		else {
 			throw new UnsupportedOperationException("Result: " + result);
+		}
+	}
+
+	public static void SetHighlightButtonStyle(boolean highlighting) {
+		// Get the highlighting label
+		Label highlightingLabel = (Label) Watt.primaryStage.getScene().lookup("#highlight");
+		// Get the styleClass of the Recording label
+		ObservableList<String> styleClasses = highlightingLabel.getStyleClass();
+		if (highlighting) {
+			// Update the styleClass of the highlighting label
+			styleClasses.remove("test-step-header-button");
+			styleClasses.add("test-step-header-button-highlighting");
+			// Update the Tooltip
+			highlightingLabel.getTooltip().setText("Stop Highlighting");
+		}
+		else {
+			// Update the styleClass of the recording label
+			styleClasses.remove("test-step-header-button-highlighting");
+			styleClasses.add("test-step-header-button");
+			// Update the Tooltip
+			highlightingLabel.getTooltip().setText("Highlight Elements");
 		}
 	}
 

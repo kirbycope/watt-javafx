@@ -57,6 +57,8 @@ public class TestRunner {
 		TestRunner.queueIndex = 0;
 		// Enable the Add Step button
 		UiHelpers.AddStepButtonEnabled(true);
+		// Enable the Highlight button
+		UiHelpers.HighlightButtonEnabled(true);
 		// Enable the Play button
 		UiHelpers.PlayButtonEnabled(true);
 		// Enable the Record button

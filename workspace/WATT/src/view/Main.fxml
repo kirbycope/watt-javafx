@@ -83,6 +83,14 @@
 						<Tooltip text="Record" />
 					</tooltip>
 				</Label>
+				<Label id="highlight" onMouseClicked="#Highlight" styleClass="test-step-header-button" text="🖉">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Highlight Elements" />
+					</tooltip>
+				</Label>
 				<Label id="clear-results" disable="true" onMouseClicked="#ClearResults" styleClass="test-step-header-button" text="❌">
 					<HBox.margin>
 						<Insets bottom="0" left="6" right="6" top="0" />

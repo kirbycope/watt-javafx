@@ -38,6 +38,16 @@
 	-fx-text-fill: #6d6d6d;
 }
 
+.test-step-header-button-highlighting {
+	-fx-fill: #337ab7;
+	-fx-font-size: 1em;
+	-fx-text-fill: #337ab7;
+}
+.test-step-header-button-highlighting:hover {
+	-fx-fill: #286090;
+	-fx-text-fill: #286090;
+}
+
 .test-step-header-button-recording {
 	-fx-fill: #d9534f;
 	-fx-font-size: 1em;

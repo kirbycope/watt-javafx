@@ -20,6 +20,7 @@ public class Watt extends Application {
 	public static Stage primaryStage;
 	public static boolean playing;
 	public static boolean recording;
+	public static boolean highlighting;
 	public static VBox testStepsContainer;
 	public static Stage browserStage;
 	public static WebEngine webEngine;

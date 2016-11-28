@@ -27,12 +27,14 @@ public class Browser {
 		          public void handle(WindowEvent windowEvent) {
 		        	  Watt.browserStage = null;
 		        	  Watt.webEngine = null;
+		        	  // Set Highlighting flag;
+		        	  Watt.highlighting = false;
+		        	  // Change the highlighting button style
+		        	  UiHelpers.SetRecordButtonStyle(Watt.highlighting);
 		        	  // Set Recording flag
 		        	  Watt.recording = false;
 		        	  // Change recording button style
 		        	  UiHelpers.SetRecordButtonStyle(Watt.recording);
-		        	  // Stop recording
-		        	  StopRecordingScripts();
 		          }
 			});
 		}
@@ -57,11 +59,17 @@ public class Browser {
 							window = (JSObject) Browser.scriptResult;
 							// Map "app" in JS to a class in Java
 	    					window.setMember("app", new Callback());
+	    					// Add the Context Menu
+	    					InjectContextMenuScripts();
 						}
 						// Complete any currently executing test step
 						if (Watt.playing) {
 							TestRunner.CompleteTask("pass");
-						};
+						}
+						// If highlighting, then add the Highlighting script(s)
+						if (Watt.highlighting) {
+							InjectHighlightingScripts();
+						}
 						// If recording, then add the Recording script(s)
 						if (Watt.recording) {
 							InjectRecordingScripts();
@@ -112,6 +120,15 @@ public class Browser {
 		System.out.println("[Browser.java:21] Result |:| " + scriptResult);
 	}
 
+	public static void InjectContextMenuScripts() {
+		// Inject style ContextMenu.css
+		InjectCss( Watt.SourceFileToString("/assets/css/ContextMenu.css") );
+		// Inject Script ContextMenu.js
+		InjectJs( Watt.SourceFileToString("/assets/js/ContextMenu.js") );
+		// Turn on the Context Menu
+		Browser.ExecuteScript("document.addEventListener('contextmenu', contextMenuHandler, true);");
+	}
+
 	public static void InjectCss(String style) {org.w3c.dom.Document doc = Watt.webEngine.getDocument();
 	org.w3c.dom.Node addStyle = doc.createElement("style");
 	addStyle.setTextContent(style);
@@ -126,23 +143,20 @@ public class Browser {
 	    element.appendChild(scriptElement);
 	}
 
-	public static void InjectRecordingScripts() {
+	public static void InjectHighlightingScripts() {
 		// Inject style HightlightMouseoverElement.css
 		InjectCss( Watt.SourceFileToString("/assets/css/HightlightMouseoverElement.css") );
 		// Inject script HightlightMouseoverElement.js
 		InjectJs( Watt.SourceFileToString("/assets/js/HightlightMouseoverElement.js") );
 		// Turn on the Element Highlighter
 		Browser.ExecuteScript("document.addEventListener('mousemove', hoverHandler, true);");
+	}
+
+	public static void InjectRecordingScripts() {
 		// Inject script OnClick.js
 		InjectJs( Watt.SourceFileToString("/assets/js/OnClick.js") );
 		// Turn on the OnClick
 		Browser.ExecuteScript("document.addEventListener('click', clickHandler, true);");
-		// Inject style ContextMenu.css
-		InjectCss( Watt.SourceFileToString("/assets/css/ContextMenu.css") );
-		// Inject Script ContextMenu.js
-		InjectJs( Watt.SourceFileToString("/assets/js/ContextMenu.js") );
-		// Turn on the Context Menu
-		Browser.ExecuteScript("document.addEventListener('contextmenu', contextMenuHandler, true);");
 	}
 
 	public void Forward() {
@@ -200,17 +214,16 @@ public class Browser {
 		}
 	}
 
-	public static void StopRecordingScripts() {
+	public static void StopHighlightingScripts() {
 		// Remove hover highlighter style
 		Browser.ExecuteScript("if (prevElement!= null) {prevElement.classList.remove('mouseOn');}");
-		// Remove contextMenu style
-		Browser.ExecuteScript("document.getElementById('context-menu').style.visibility = 'hidden'");
 		// Remove hover highlighter handler
 		Browser.ExecuteScript("document.removeEventListener('mousemove', hoverHandler, true);");
+	}
+
+	public static void StopRecordingScripts() {
 		// Remove click handler
 		Browser.ExecuteScript("document.removeEventListener('click', clickHandler, true);");
-		// Remove context menu handler
-		Browser.ExecuteScript("document.removeEventListener('contextmenu', contextMenuHandler, true);");
 	}
 
 	public void Tablet() {
