@@ -27,6 +27,8 @@ public class Watt extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		// Setup Log Folder
+		Log.SetupLogFolder();
 		// Load Icon
 		applicationIcon = new Image(Watt.class.getResourceAsStream("../assets/img/icon.png"));
 		// Set the main stage

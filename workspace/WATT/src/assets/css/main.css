@@ -110,7 +110,7 @@
 }
 
 .toast {
-	-fx-background-color: #656565;
+	-fx-background-color: rgba(101, 101, 101, 0.75); /* #656565; */
 	-fx-background-radius: 1em;
 	-fx-fill: #fff;
 	-fx-padding: .5em 1em .5em 1em;

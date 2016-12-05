@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import model.TestStep;
+import watt.Log;
 import watt.TestCase;
 import watt.TestRunner;
 import watt.UiHelpers;
@@ -466,6 +467,8 @@ public class Main {
 			UiHelpers.AddStepButtonEnabled(false);
 			// Enable Stop button
 			UiHelpers.StopButtonEnabled(true);
+			// Create a new log file
+			Log.CreateNewLogFile();
 			// Set Playing flag
 			Watt.playing = true;
 			// Set/Reset queueIndex for the Test Runner

@@ -15,6 +15,7 @@ var contextMenuHandler =
 		el.style.left = pageXOffset + e.clientX + "px";
 		el.style.top = pageYOffset + e.clientY + "px";
 		el.style.visibility = "visible";
+		adjustContextMenuPosition(el);
 		document.addEventListener("click", hideMenu, true);
 	}
 ;
@@ -109,6 +110,17 @@ function addHtml(eventTarget) {
 	document.body.appendChild(divMenu);
 	// Add event listener to hide the menu
 	document.addEventListener("click", hideMenu, true);
+}
+
+function adjustContextMenuPosition(el) {
+	var vpHeight = window.innerHeight;
+	var vpWidth = window.innerWidth;
+	app.printToJavaConsole(vpHeight + " x " + vpWidth);
+	var elHeight = el.offsetHeight;
+	var elWidth = el.offsetWidth;
+	app.printToJavaConsole(elHeight + " x " + elWidth);
+
+	// TODO: This is a work in progress
 }
 
 function createLocator(eventTarget) {

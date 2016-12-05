@@ -12,6 +12,9 @@ public class TestRunner {
 	public static boolean continueOnFailure;
 
 	public static void CompleteTask(String result) {
+		// Log Result
+		Log.WriteLine("RESULT: " + result);
+		Log.WriteLine("");
 		// Style the test step based on the result
 		UiHelpers.StyleTestStepByResult(result);
 		// Increment the queueIndex
@@ -21,6 +24,7 @@ public class TestRunner {
 			CompleteTest();
 		}
 		else {
+
 			// If the Test Step was stopped
 			if (result.equals("stop")) {
 				// Complete test
@@ -71,8 +75,12 @@ public class TestRunner {
 		if (Watt.browserStage == null) {
 			Watt.webEngine = null;
 		}
-
-		System.out.println("[TestRunner.java:48] Test Complete!");
+		// Finalize the log file
+		Log.FinalizeLogFile();
+		// Open the log file
+		Log.OpenLogFile();
+		// Alert the user
+		UiHelpers.ShowToast("Test Run Complete!");
 	}
 
 	private static TestStep GetCurrentTestStepDetails() {
@@ -90,6 +98,14 @@ public class TestRunner {
 			UiHelpers.StyleCurrentTestStep();
 			// Define the Test Step
 			TestStep testStep = GetCurrentTestStepDetails();
+			// Log Current Step
+			Log.WriteLine("Test Step: " + (queueIndex + 1));
+			Log.WriteLine("  [Description] " + testStep.Description);
+			Log.WriteLine("  [Command] " + testStep.Command);
+			Log.WriteLine("  [Target] " + testStep.Target);
+			Log.WriteLine("  [Value] " + testStep.Value);
+			Log.WriteLine("  [Execute Step] " + testStep.ExecuteStep);
+			Log.WriteLine("  [Continue on Failure] " + testStep.ContinueOnFailure);
 			// Check the Test Step should execute
 			if (testStep.ExecuteStep) {
 				// Set the Continue on Failure flag
