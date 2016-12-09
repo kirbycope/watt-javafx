@@ -32,7 +32,7 @@ import watt.TestRunner;
 import watt.UiHelpers;
 import watt.Watt;
 
-@SuppressWarnings({"rawtypes", "unchecked", "restriction"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Main {
 
 	public void AddStep() {
@@ -388,7 +388,8 @@ public class Main {
 				// Create a new FXML Loader (loads an object hierarchy from an XML document)
 		 		FXMLLoader loader = new FXMLLoader();
 		 		// Give the loader the location of the XML document
-		 		loader.setLocation(Watt.class.getResource("../view/Browser.fxml"));
+		 		//loader.setLocation(Watt.class.getResource("../view/Browser.fxml"));
+		 		loader.setLocation(Watt.class.getResource("/view/Browser.fxml"));
 		 		// Load an object hierarchy from the FXML document into a generic (base class) node
 		 		Parent root =  loader.load();
 		 		// Create a new application (Stage) window

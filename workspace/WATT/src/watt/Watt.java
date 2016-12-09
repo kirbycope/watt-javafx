@@ -30,7 +30,8 @@ public class Watt extends Application {
 		// Setup Log Folder
 		Log.SetupLogFolder();
 		// Load Icon
-		applicationIcon = new Image(Watt.class.getResourceAsStream("../assets/img/icon.png"));
+		//applicationIcon = new Image(Watt.class.getResourceAsStream("../assets/img/icon.png"));
+		applicationIcon = new Image(Watt.class.getResourceAsStream("/assets/img/icon.png"));
 		// Set the main stage
 		initMainLayout(primaryStage);
 	}
@@ -49,7 +50,8 @@ public class Watt extends Application {
 			// Create a new FXML Loader (loads an object hierarchy from an XML document)
 			FXMLLoader loader = new FXMLLoader();
 			// Give the loader the location of the XML document
-			loader.setLocation(Watt.class.getResource("../view/Main.fxml"));
+			//loader.setLocation(Watt.class.getResource("../view/Main.fxml"));
+			loader.setLocation(Watt.class.getResource("/view/Main.fxml"));
 			// Load an object hierarchy from the FXML document into a generic (base class) node
 			Parent root = loader.load();
 			// Application (Stage) Icon
