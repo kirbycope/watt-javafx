@@ -11,11 +11,9 @@ var contextMenuHandler =
 		}
 		// Add the HTML of the context menu to current page
 		addHtml(e.target);
-		el = document.getElementById("context-menu");
-		el.style.left = pageXOffset + e.clientX + "px";
-		el.style.top = pageYOffset + e.clientY + "px";
-		el.style.visibility = "visible";
-		adjustContextMenuPosition(el);
+		// Adjust the Context Menu position
+		adjustContextMenuPosition(e.clientX, e.clientY);
+		// Add an event listener to 'hide' the menu when any click occurs
 		document.addEventListener("click", hideMenu, true);
 	}
 ;
@@ -112,15 +110,33 @@ function addHtml(eventTarget) {
 	document.addEventListener("click", hideMenu, true);
 }
 
-function adjustContextMenuPosition(el) {
-	var vpHeight = window.innerHeight;
-	var vpWidth = window.innerWidth;
-	app.printToJavaConsole(vpHeight + " x " + vpWidth);
-	var elHeight = el.offsetHeight;
-	var elWidth = el.offsetWidth;
-	app.printToJavaConsole(elHeight + " x " + elWidth);
-
-	// TODO: This is a work in progress
+function adjustContextMenuPosition(eventX, eventY) {
+	// Get the Context Menu
+	var contextMenu = document.getElementById("context-menu");
+	// If the Mouse Event's X-position plus the Context Menu's width are greater than the ViewPort's width
+	if ((eventX + contextMenu.offsetWidth) > window.innerWidth) {
+		// Find out by how much of the menu is outside of the ViewPort
+		var dif = (eventX + contextMenu.offsetWidth) - window.innerWidth;
+		// Move the menu to the left to compensate
+		contextMenu.style.left = (pageXOffset + eventX - dif) + "px";
+	}
+	else {
+		// Set the Context Menu position to the mouse event's position
+		contextMenu.style.left = (pageXOffset + eventX) + "px";
+	}
+	// If the Mouse Event's Y-position plus the Context Menu's height are greater than the ViewPort's height
+	if ((eventY + contextMenu.offsetHeight) > window.innerHeight) {
+		// Find out by how much of the menu is outside of the ViewPort
+		var dif = (eventY + contextMenu.offsetHeight) - window.innerHeight;
+		// Move the menu to the left to compensate
+		contextMenu.style.top = (pageYOffset + eventY - dif) + "px";
+	}
+	else {
+		// Set the Context Menu position to the mouse event's position
+		contextMenu.style.top = (pageYOffset + eventY) + "px";
+	}
+	// Show the Context Menu
+	contextMenu.style.visibility = "visible";
 }
 
 function createLocator(eventTarget) {
