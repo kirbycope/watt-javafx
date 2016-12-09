@@ -71,7 +71,7 @@ public class TestCommandHelpers {
 				LocalTime currentTime = LocalTime.now();
 				// If the ScheduledThreadPoolExecutor has been running for more than a minute, shut it down
 				if ( (currentTime.getMinute() - startTime.getMinute()) != 0 ) {
-					StopWaitForAndCompleteTask(exec, "fail"); // TODO: Mark as test execution timed out
+					StopWaitForAndCompleteTask(exec, "timeout");
 				}
 				// If the script has ran at least once
 				if (Browser.scriptResult != null) {

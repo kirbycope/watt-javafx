@@ -268,7 +268,43 @@ public class TestStepCommands {
 	}
 
 	public static void verifyTable(String selector, String value) {
-		// TODO
+		// Handle Selenium IDE selector (Ex., "table.3.2...")
+		if (selector.startsWith("table")) {
+			// Get the table value
+			String table = selector.substring(selector.indexOf("table"));
+			// Get the table row and column
+			int row = Integer.parseInt(table.substring(6,7));
+			int column = Integer.parseInt(table.substring(8, 9));
+			// Handle the Row
+			if (row == 0) {
+				selector = selector.replaceFirst("." + row, " > thead > tr");
+			}
+			else {
+				selector = selector.replaceFirst("." + row, " > tbody > tr:nth-child(" + (row) + ")");
+			}
+			// Handle the Column
+			if (column == 0) {
+				selector = selector.replace("." + column, " > td");
+			}
+			else {
+				selector = selector.replace("." + column, " > td:nth-child(" + (column + 1) + ")");
+			}
+		}
+		// Get the element's text
+		Browser.ExecuteScript(selector + ".textContent");
+		// Handle script result
+		if (Browser.scriptResult == null) {
+			TestRunner.CompleteTask("fail"); // isNull
+		}
+		else {
+			// Pass/fail test accordingly
+			if (Browser.scriptResult.equals(value)) {
+				TestRunner.CompleteTask("pass");
+			}
+			else {
+				TestRunner.CompleteTask("fail");
+			}
+		}
 	}
 
 	public static void verifyText(String selector, String value) {

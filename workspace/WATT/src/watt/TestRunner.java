@@ -19,24 +19,29 @@ public class TestRunner {
 		UiHelpers.StyleTestStepByResult(result);
 		// Increment the queueIndex
 		queueIndex++;
+		// If there are no more steps to run, then complete the test run
 		if (queueIndex == Watt.testStepsContainer.getChildren().size()) {
 			// Complete test
 			CompleteTest();
 		}
 		else {
-
-			// If the Test Step was stopped
-			if (result.equals("stop")) {
-				// Complete test
-				CompleteTest();
-			}
-			// If the Test Step was skipped
+			// Test Step was skipped
 			if (result.equals("skip")) {
 				// Execute the next task
 				NextTask();
 			}
-			// If the Test Step failed
-			if (result.equals("fail")) {
+			// Test Step was stopped
+			else if (result.equals("stop")) {
+				// Complete test
+				CompleteTest();
+			}
+			// Test Step timed out
+			else if (result.equals("timeout")) {
+				// Complete test
+				CompleteTest();
+			}
+			// Test Step failed
+			else if (result.equals("fail")) {
 				// If the Continue on Failure flag is set to true
 				if (continueOnFailure) {
 					// Execute the next task

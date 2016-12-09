@@ -190,7 +190,7 @@ public class UiHelpers {
 			// Update the styleClass of the firstRow
 			styleClasses.add("test-step-container-passed");
 		}
-		else if (result.equals("fail")){
+		else if ( (result.equals("fail")) || (result.equals("timeout")) ) {
 			// Update the styleClass of the firstRow
 			styleClasses.add("test-step-container-failed");
 		}

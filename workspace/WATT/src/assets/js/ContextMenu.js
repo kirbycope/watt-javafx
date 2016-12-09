@@ -80,11 +80,12 @@ function addHtml(eventTarget) {
 	verifyTable.className = 'li-disabled';
 	verifyTable.textContent = 'verifyTable';
 	// Handle eventTarget type
-	if (eventTarget.tagName == 'table') {
+	app.printToJavaConsole("eventTarget.tagName: " + eventTarget.tagName);
+	if ((eventTarget.tagName.toLowerCase() == 'th') || (eventTarget.tagName.toLowerCase() == 'td')) {
 		verifyTable.className = 'li';
-		verifyTable.textContent = 'verifyTable'; // TODO: Whatever it is verifyTable does
+		verifyTable.textContent = truncateString('verifyTable', eventTarget.textContent);
 		verifyTable.onclick = function(e) {
-			app.addTestStep('verifyTable', target, '');
+			app.addTestStep('verifyTable', target, eventTarget.textContent);
 			hideMenu();
 		}
 	}
