@@ -80,7 +80,6 @@ function addHtml(eventTarget) {
 	verifyTable.className = 'li-disabled';
 	verifyTable.textContent = 'verifyTable';
 	// Handle eventTarget type
-	app.printToJavaConsole("eventTarget.tagName: " + eventTarget.tagName);
 	if ((eventTarget.tagName.toLowerCase() == 'th') || (eventTarget.tagName.toLowerCase() == 'td')) {
 		verifyTable.className = 'li';
 		verifyTable.textContent = truncateString('verifyTable', eventTarget.textContent);

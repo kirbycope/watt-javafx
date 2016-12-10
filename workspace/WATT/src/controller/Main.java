@@ -32,7 +32,7 @@ import watt.TestRunner;
 import watt.UiHelpers;
 import watt.Watt;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "restriction"})
 public class Main {
 
 	public void AddStep() {

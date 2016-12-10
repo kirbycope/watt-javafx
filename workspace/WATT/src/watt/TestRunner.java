@@ -83,7 +83,7 @@ public class TestRunner {
 		// Finalize the log file
 		Log.FinalizeLogFile();
 		// Open the log file
-		Log.OpenLogFile();
+		//Log.OpenLogFile(); // DEBUGGING
 		// Alert the user
 		UiHelpers.ShowToast("Test Run Complete!");
 	}

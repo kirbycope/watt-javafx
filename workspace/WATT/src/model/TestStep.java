@@ -173,14 +173,28 @@ public class TestStep {
 			selector = "document.evaluate('//*[text()=\"" + target + "\"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0)";
 		}
 		else if (target.startsWith("name=")) {
-			// Remove name=
-			target = target.substring(5);
-			// TODO: Check for combination of name, type, and value
+			String targetName = null;
+			String targetType = null;
+			String targetValue = null;
+			String[] targetValues = target.split("\\s+");
+			// Parse each String in the array
+			for (String str : targetValues) {
+				if (str.startsWith("name=")) {
+					targetName = "[name='" + str.substring(5) + "']";
+				}
+				else if (str.startsWith("type=")) {
+					targetType = "[type='" + str.substring(5) + "']";
+				}
+				else if (str.startsWith("value=")) {
+					targetValue = "[value='" + str.substring(6) + "']";
+				}
+			}
+			selector = "document.querySelector(\"" +  targetName + targetType + targetValue + "\")";
 		}
 		else if (target.startsWith("xpath=")) {
 			// Remove xpath=
 			target = target.substring(6);
-			//
+			// Build selector
 			selector = "document.evaluate(\"" + target + "\", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0)";
 		}
 		return selector;
