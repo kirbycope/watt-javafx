@@ -1,6 +1,7 @@
 package watt;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import controller.Browser;
 import javafx.scene.layout.VBox;
@@ -10,8 +11,9 @@ public class TestRunner {
 
 	public static int queueIndex;
 	public static boolean continueOnFailure;
+	public static Map<String, String> store;
 
-	public static void CompleteTask(String result) {
+ 	public static void CompleteTask(String result) {
 		// Log Result
 		Log.WriteLine("RESULT: " + result);
 		Log.WriteLine("");

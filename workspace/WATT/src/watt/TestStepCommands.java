@@ -29,6 +29,13 @@ public class TestStepCommands {
 		TestCommandHelpers.PassFailTestBasedOnScriptResult();
 	}
 
+	public static void echo(String target) {
+		// Write output to console (only viewable if .jar is launched via command-line)
+		System.out.println(target);
+		// Complete Task
+		TestRunner.CompleteTask("pass");
+	}
+
 	public static void goBack() {
 		// Go Back
 		Browser.ExecuteScript("history.back()");
@@ -165,6 +172,13 @@ public class TestStepCommands {
 		Browser.ExecuteScript(javaScript);
 		// Handle Result of script
 		TestCommandHelpers.PassFailTestBasedOnScriptResult();
+	}
+
+	public static void store(String valueToStore, String variableName) {
+		// Store the {target} to a variable named {value}
+		TestRunner.store.put(variableName, valueToStore);
+		// Complete Task
+		TestRunner.CompleteTask("pass");
 	}
 
 	public static void submit(String selector) {

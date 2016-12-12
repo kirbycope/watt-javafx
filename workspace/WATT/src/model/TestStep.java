@@ -1,5 +1,6 @@
 package model;
 
+import watt.TestRunner;
 import watt.TestStepCommands;
 
 public class TestStep {
@@ -32,15 +33,22 @@ public class TestStep {
 	}
 
 	public void click() {
-		TestStepCommands.click(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.click(selector);
 	}
 
 	public void clickAndWait() {
-		TestStepCommands.clickAndWait(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.clickAndWait(selector);
 	}
 
 	public void deleteAllVisibleCookies() {
 		TestStepCommands.deleteAllVisibleCookies();
+	}
+
+	public void echo() {
+		String text = GetText(this.Target);
+		TestStepCommands.echo(text);
 	}
 
 	public void goBack() {
@@ -60,11 +68,13 @@ public class TestStep {
 	}
 
 	public void open() {
-		TestStepCommands.open(this.Target);
+		String text = GetText(this.Target);
+		TestStepCommands.open(text);
 	}
 
 	public void pause() {
-		TestStepCommands.pause(this.Target);
+		String text = GetText(this.Target);
+		TestStepCommands.pause(text);
 	}
 
 	public void refresh() {
@@ -76,19 +86,23 @@ public class TestStep {
 	}
 
 	public void runScript() {
+		// Warning: Does not allow "stored" variables
 		TestStepCommands.runScript(this.Target);
 	}
 
 	public void select() {
-		TestStepCommands.select(GetSelector(), this.Value);
+		String selector = GetSelector();
+		String text = GetText(this.Value);
+		TestStepCommands.select(selector, text);
 	}
 
 	public void store() {
-		// TODO: Store in JavaFx
+		TestStepCommands.store(this.Target, this.Value);
 	}
 
 	public void submit() {
-		TestStepCommands.submit(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.submit(selector);
 	}
 
 	public void submitAndWait() {
@@ -96,47 +110,62 @@ public class TestStep {
 	}
 
 	public void type() {
-		TestStepCommands.type(GetSelector(), this.Value);
+		String selector = GetSelector();
+		String text = GetText(this.Value);
+		TestStepCommands.type(selector, text);
 	}
 
 	public void verifyChecked() {
-		TestStepCommands.verifyChecked(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.verifyChecked(selector);
 	}
 
 	public void verifyElementNotPresent() {
-		TestStepCommands.verifyElementNotPresent(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.verifyElementNotPresent(selector);
 	}
 
 	public void verifyElementPresent() {
-		TestStepCommands.verifyElementPresent(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.verifyElementPresent(selector);
 	}
 
 	public void verifyLocation() {
-		TestStepCommands.verifyLocation(this.Target);
+		String text = GetText(this.Target);
+		TestStepCommands.verifyLocation(text);
 	}
 
 	public void verifyNotChecked() {
-		TestStepCommands.verifyNotChecked(GetSelector());
+		String selector = GetSelector();
+		TestStepCommands.verifyNotChecked(selector);
 	}
 
 	public void verifyTable() {
-		TestStepCommands.verifyTable(GetSelector(), this.Value);
+		String selector = GetSelector();
+		String text = GetText(this.Value);
+		TestStepCommands.verifyTable(selector, text);
 	}
 
 	public void verifyText() {
-		TestStepCommands.verifyText(GetSelector(), this.Value);
+		String selector = GetSelector();
+		String text = GetText(this.Value);
+		TestStepCommands.verifyText(selector, text);
 	}
 
 	public void verifyTitle() {
-		TestStepCommands.verifyTitle(this.Target);
+		String text = GetText(this.Target);
+		TestStepCommands.verifyTitle(text);
 	}
 
 	public void verifyValue() {
-		TestStepCommands.verifyValue(GetSelector(), this.Value);
+		String selector = GetSelector();
+		String text = GetText(this.Value);
+		TestStepCommands.verifyValue(selector, text);
 	}
 
 	public void waitForLocation() {
-		TestStepCommands.waitForLocation(this.Target);
+		String text = GetText(this.Target);
+		TestStepCommands.waitForLocation(text);
 	}
 
 	private String GetSelector() {
@@ -198,5 +227,18 @@ public class TestStep {
 			selector = "document.evaluate(\"" + target + "\", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0)";
 		}
 		return selector;
+	}
+
+	private String GetText(String text) {
+		// Handle "stored" variables. Ex., "${i}"
+		if(text.contains("${")) {
+			// Clean the text to get the variable name
+			text = text.replace("${", "");
+			text = text.replace("}", "");
+			// Find the value for the given text
+			text = TestRunner.store.get(text);
+		}
+		// Return the fully qualified text
+		return text;
 	}
 }

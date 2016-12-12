@@ -1,6 +1,9 @@
 package controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.sun.javafx.stage.StageHelper;
 
 import javafx.collections.ObservableList;
@@ -490,6 +493,8 @@ public class Main {
 			Watt.playing = true;
 			// Set/Reset queueIndex for the Test Runner
 			TestRunner.queueIndex = 0;
+			// Set/Reset the store variable
+			TestRunner.store = new HashMap<>();
 			// Start the Test Runner
 			TestRunner.NextTask();
 		}
