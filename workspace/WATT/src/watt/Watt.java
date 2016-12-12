@@ -3,6 +3,7 @@ package watt;
 import java.io.IOException;
 import java.io.InputStream;
 
+import controller.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -66,6 +67,8 @@ public class Watt extends Application {
 			primaryStage.setAlwaysOnTop(true);
 			// Show the application (stage) window
 			primaryStage.show();
+			// Add event listeners to main window
+			Main.AddEventListeners();
 			// Initialize the test step container
 			testStepsContainer = new VBox();
 			// Set all the options for the "Command" ComboBox

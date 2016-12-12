@@ -25,6 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.TestStep;
 import watt.Log;
 import watt.TestCase;
@@ -34,6 +35,18 @@ import watt.Watt;
 
 @SuppressWarnings({"rawtypes", "unchecked", "restriction"})
 public class Main {
+
+	public static void AddEventListeners() {
+		// Set the On-Close action
+		Watt.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent windowEvent) {
+	        	  // If the browser window is open, then close it
+	        	  if (BrowserIsOpen()) {
+	        		  Watt.browserStage.close();
+	        	  }
+	          }
+		});
+	}
 
 	public void AddStep() {
 		// Get the "Description"
@@ -186,7 +199,7 @@ public class Main {
 		UiHelpers.ClearTestStepBuilder();
 	}
 
-	private boolean BrowserIsOpen() {
+	private static boolean BrowserIsOpen() {
 		// Get all observable windows
 		ObservableList<Stage> allWindows = StageHelper.getStages();
 		if (allWindows.size() > 1) {
