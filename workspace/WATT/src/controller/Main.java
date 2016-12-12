@@ -383,7 +383,7 @@ public class Main {
 	}
 
 	public void OpenBrowserWindow() {
-		if (BrowserIsOpen() == false){
+		if (BrowserIsOpen() == false) {
 			try {
 				// Create a new FXML Loader (loads an object hierarchy from an XML document)
 		 		FXMLLoader loader = new FXMLLoader();
@@ -422,6 +422,10 @@ public class Main {
 		 	catch (IOException e) {
 		 		e.printStackTrace();
 		 	}
+		}
+		else {
+			// Bring browser window to front
+			Watt.browserStage.toFront();
 		}
 	}
 
