@@ -30,6 +30,42 @@
 	<td>HTML Test Page - Quality Consulting</td>
 	<td></td>
 </tr>
+	<!--select label=Audi-->
+<tr data-continueOnFailure="false" data-execute="true">
+	<td>select</td>
+	<td>id=cars</td>
+	<td>label=Audi</td>
+</tr>
+	<!--click id=myCheck-->
+<tr data-continueOnFailure="false" data-execute="true">
+	<td>click</td>
+	<td>id=myCheck</td>
+	<td></td>
+</tr>
+	<!--type tim-->
+<tr data-continueOnFailure="false" data-execute="true">
+	<td>type</td>
+	<td>css=#NameForm > INPUT:nth-child(1)</td>
+	<td>Tim</td>
+</tr>
+	<!--type cope-->
+<tr data-continueOnFailure="false" data-execute="true">
+	<td>type</td>
+	<td>css=#NameForm > INPUT:nth-child(2)</td>
+	<td>Cope</td>
+</tr>
+	<!--click submit-->
+<tr data-continueOnFailure="false" data-execute="true">
+	<td>click</td>
+	<td>css=#NameForm > INPUT:nth-child(4)</td>
+	<td></td>
+</tr>
+	<!--Wait for Location: /html-test-page/?FirstName=Tim&LastName=Cope-->
+<tr data-continueOnFailure="false" data-execute="true">
+	<td>waitForLocation</td>
+	<td>/html-test-page/?FirstName=Tim&LastName=Cope</td>
+	<td>null</td>
+</tr>
 </tbody>
 </table>
 </body>

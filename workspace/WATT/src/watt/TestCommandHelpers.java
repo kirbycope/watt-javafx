@@ -29,13 +29,8 @@ public class TestCommandHelpers {
 	public static void PassFailTestBasedOnScriptResult() {
 		// Handle JavaSript result
 		if (Browser.scriptResult != null) {
-			if (Browser.scriptResult.toString().equals("undefined")) {
-				// Complete Task
-				TestRunner.CompleteTask("pass");
-			}
-			else {
-				TestRunner.CompleteTask("fail"); // is unexpected value
-			}
+			// Complete Task
+			TestRunner.CompleteTask("pass");
 		}
 		else {
 			TestRunner.CompleteTask("fail"); // isNull
@@ -73,12 +68,9 @@ public class TestCommandHelpers {
 				if ( (currentTime.getMinute() - startTime.getMinute()) != 0 ) {
 					StopWaitForAndCompleteTask(exec, "timeout");
 				}
-				// If the script has ran at least once
-				if (Browser.scriptResult != null) {
-					// Check if script has returned "true"
-					if (Browser.scriptResult.toString().equals("true")) {
-						StopWaitForAndCompleteTask(exec, "pass");
-					}
+				// Check if script has returned "true"
+				if (Browser.scriptResult.toString().equals("true")) {
+					StopWaitForAndCompleteTask(exec, "pass");
 				}
 				// Run the following code in the FX application thread
 				Platform.runLater(new Runnable() {
