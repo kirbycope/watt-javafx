@@ -224,6 +224,27 @@ public class UiHelpers {
 		}
 	}
 
+	public static void SetPinButtonStyle(boolean pinned) {
+		// Get the pin label
+		Label pinLabel = (Label) Watt.primaryStage.getScene().lookup("#pin");
+		// Get the styleClass of the Recording label
+		ObservableList<String> styleClasses = pinLabel.getStyleClass();
+		if (pinned) {
+			// Update the styleClass of the pin label
+			styleClasses.remove("app-toolbar-button");
+			styleClasses.add("app-toolbar-button-pinned");
+			// Update the Tooltip
+			pinLabel.getTooltip().setText("Remove Always on Top");
+		}
+		else {
+			// Update the styleClass of the pin label
+			styleClasses.remove("app-toolbar-button-pinned");
+			styleClasses.add("app-toolbar-button");
+			// Update the Tooltip
+			pinLabel.getTooltip().setText("Pin Always on Top");
+		}
+	}
+
 	public static void SetRecordButtonStyle(boolean recording) {
 		// Get the recording label
 		Label recordingLabel = (Label) Watt.primaryStage.getScene().lookup("#record");

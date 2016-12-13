@@ -449,6 +449,21 @@ public class Main {
 		TestCase.Open();
 	}
 
+	public void PinMainWindow() { // TODO: Change class
+		if (Watt.primaryStage.isAlwaysOnTop()) {
+			// Set window to always on top
+			Watt.primaryStage.setAlwaysOnTop(false);
+			// Change recording button style
+			UiHelpers.SetPinButtonStyle(false);
+		}
+		else {
+			// Set window to always on top
+			Watt.primaryStage.setAlwaysOnTop(true);
+			// Change recording button style
+			UiHelpers.SetPinButtonStyle(true);
+		}
+	}
+
 	public void Play() {
 		if (Watt.testStepsContainer.getChildren().size() > 0) {
 			if (Watt.browserStage == null) {

@@ -2,6 +2,7 @@ package watt;
 
 import controller.Browser;
 import javafx.concurrent.Task;
+import javafx.scene.control.TextField;
 
 public class TestStepCommands {
 
@@ -252,8 +253,11 @@ public class TestStepCommands {
 			TestRunner.CompleteTask("fail"); // isNull
 		}
 		else {
+			// Handle Base URL
+			TextField tfBaseUrl = UiHelpers.GetBaseUrlField();
+			String baseUrl = tfBaseUrl.getText();
 			// Pass/fail test accordingly
-			if (Browser.scriptResult.equals(target)) {
+			if (Browser.scriptResult.equals(baseUrl + target)) {
 				TestRunner.CompleteTask("pass");
 			}
 			else {

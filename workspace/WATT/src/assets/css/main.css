@@ -19,6 +19,16 @@
 	-fx-text-fill: #fff;
 }
 
+.app-toolbar-button-pinned {
+	-fx-fill: #f0ad4e;
+	-fx-font-size: 1em;
+	-fx-text-fill: #f0ad4e;
+}
+.app-toolbar-button-pinned:hover {
+	-fx-fill: #ec971f;
+	-fx-text-fill: #ec971f;
+}
+
 .test-step-header-wrapper {
 	-fx-padding: .5em .5em .5em .5em;
 }

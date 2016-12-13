@@ -45,6 +45,14 @@
 	               </tooltip>
                </Label>
 				<Pane HBox.hgrow="ALWAYS" />
+				<Label id="pin" onMouseClicked="#PinMainWindow" styleClass="app-toolbar-button" text="📌">
+					<HBox.margin>
+						<Insets bottom="0" left="6" right="6" top="0" />
+					</HBox.margin>
+					<tooltip>
+						<Tooltip text="Pin Always on Top" />
+					</tooltip>
+				</Label>
 				<Label id="open-browser" onMouseClicked="#OpenBrowserWindow" styleClass="app-toolbar-button" text="🌐">
 					<HBox.margin>
 						<Insets bottom="0" left="6" right="6" top="0" />
