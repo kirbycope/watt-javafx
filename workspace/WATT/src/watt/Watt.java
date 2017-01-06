@@ -2,7 +2,6 @@ package watt;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import controller.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 
@@ -32,6 +32,8 @@ public class Watt extends Application {
 		Log.SetupLogFolder();
 		// Load Icon
 		applicationIcon = new Image(Watt.class.getResourceAsStream("/assets/img/icon.png"));
+		// Load the custom font (that then must be used in CSS)
+		Font.loadFont(Watt.class.getResourceAsStream("/assets/font/symbola.ttf"), Font.getDefault().getSize());
 		// Set the main stage
 		initMainLayout(primaryStage);
 	}

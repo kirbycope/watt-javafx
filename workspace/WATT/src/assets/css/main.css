@@ -1,3 +1,7 @@
+.root {
+	-fx-font-family: "Symbola";
+}
+
 .app-wrapper {
     -fx-background-color: #f3f3f3;
     -fx-padding: 0 .5em 0 .5em;

@@ -1,3 +1,7 @@
+.root {
+	-fx-font-family: "Symbola";
+}
+
 .browser-wrapper {
     -fx-min-height: 480px;
     -fx-min-width: 320px;
